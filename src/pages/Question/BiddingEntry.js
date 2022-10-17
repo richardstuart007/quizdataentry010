@@ -3,11 +3,6 @@
 //
 import { useEffect } from 'react'
 import { Grid } from '@mui/material'
-import { useSnapshot } from 'valtio'
-//
-//  Utilities
-//
-import { ValtioStore } from '../ValtioStore'
 //
 //  Debug Settings
 //
@@ -104,7 +99,6 @@ let g_errorsUpd
 //
 //  Bidding Table
 //
-const { SQL_TABLE_BIDDING } = require('../../services/constants.js')
 const { VALIDATE_ON_CHANGE } = require('../../services/constants.js')
 const VALIDBIDS = [
   '1C',
@@ -149,59 +143,21 @@ const SPECIALBIDS = ['PASS', 'X', 'XX', '?']
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'BiddingEntry'
-let debugStack = []
 //=====================================================================================
 export default function BiddingEntry(props) {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
   //.............................................................................
   //.  dbRow Un-pack
   //.............................................................................
   const dbRowUnPack = row => {
-    debugFunStart('dbRowUnPack')
+    if (debugFunStart) console.log('dbRowUnPack')
     //
     //  Build Bidding Arrays
     //
-    debugLogging('row ', row)
+    if (debugLog) console.log('row ', row)
     let Rounds = row.brounds
-    debugLogging('Rounds ', Rounds)
+    if (debugLog) console.log('Rounds ', Rounds)
     //
     //  Unpack arrays into form fields
     //
@@ -209,12 +165,12 @@ export default function BiddingEntry(props) {
     let roundCnt = 0
     Rounds.forEach(round => {
       roundCnt++
-      // debugLogging(`round ${roundCnt}`, round)
+      // if (debugLog) console.log(`round ${roundCnt}`, round)
 
       let bidCnt = 0
       round.forEach(bid => {
         bidCnt++
-        // debugLogging(`bid ${bidCnt}`, bid)
+        // if (debugLog) console.log(`bid ${bidCnt}`, bid)
         //
         //  Convert N to empty string
         //
@@ -258,13 +214,12 @@ export default function BiddingEntry(props) {
     setValues({
       ...g_formValues
     })
-    debugFunEnd()
   }
   //.............................................................................
   //.  dbRow Pack
   //.............................................................................
   const dbRowPack = () => {
-    debugFunStart('dbRowPack')
+    if (debugFunStart) console.log('dbRowPack')
     //
     //  Initialise dbValues
     //
@@ -307,26 +262,25 @@ export default function BiddingEntry(props) {
         }
       }
     })
-    debugFunEnd()
   }
   //.............................................................................
   //.  Tidy Field
   //.............................................................................
   const tidyField = field => {
-    debugFunStart('tidyField')
+    if (debugFunStart) console.log('tidyField')
     let fieldRtn = field
     if (fieldRtn) {
       fieldRtn = fieldRtn.trim()
       fieldRtn = fieldRtn.toUpperCase()
     }
-    debugFunEnd()
+
     return fieldRtn
   }
   //.............................................................................
   //.  Tidy All Fields
   //.............................................................................
   const tidyFieldAll = workValues => {
-    debugFunStart('tidyFieldAll')
+    if (debugFunStart) console.log('tidyFieldAll')
     //
     //  Get Last Bid
     //
@@ -355,19 +309,17 @@ export default function BiddingEntry(props) {
     //
     g_formValues = { ...workValues }
     setValues({ ...workValues })
-    debugFunEnd()
   }
   //.............................................................................
   //.  GET Data by ID
   //.............................................................................
   const getRowById = () => {
-    debugFunStart('getRowById')
+    if (debugFunStart) console.log('getRowById')
     //
     //  Process promise
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_BIDDING,
+      sqlTable: 'bidding',
       sqlWhere: ` where bid = ${bid}`
     }
     var myPromiseGet = MyQueryPromise(rowSelect(props))
@@ -375,14 +327,14 @@ export default function BiddingEntry(props) {
     //  Resolve Status
     //
     myPromiseGet.then(function (data) {
-      debugFunStart('myPromiseGet')
-      debugLogging('myPromiseGet Final fulfilled')
+      if (debugFunStart) console.log('myPromiseGet')
+      if (debugLog) console.log('myPromiseGet Final fulfilled')
       //
       //  Update record to edit
       //
       if (data[0]) {
         const row = data[0]
-        debugLogging('myPromiseGet data ', row)
+        if (debugLog) console.log('myPromiseGet data ', row)
         //
         //  Unpack data from database & update form values
         //
@@ -391,20 +343,20 @@ export default function BiddingEntry(props) {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseGet
   }
   //.............................................................................
   //.  INSERT
   //.............................................................................
   const upsertRowData = () => {
-    debugFunStart('upsertRowData')
+    if (debugFunStart) console.log('upsertRowData')
     //
     //  Pack values to dbValues
     //
@@ -413,8 +365,7 @@ export default function BiddingEntry(props) {
     //  Build Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_BIDDING,
+      sqlTable: 'bidding',
       sqlKeyName: ['bid'],
       sqlRow: dbValues
     }
@@ -426,8 +377,8 @@ export default function BiddingEntry(props) {
     //  Resolve Status
     //
     myPromiseInsert.then(function (data) {
-      debugFunStart('myPromiseInsert')
-      debugLogging('myPromiseInsert Final fulfilled')
+      if (debugFunStart) console.log('myPromiseInsert')
+      if (debugLog) console.log('myPromiseInsert Final fulfilled')
       //
       //  No data returned
       //
@@ -440,7 +391,7 @@ export default function BiddingEntry(props) {
         //
         const row = data[0]
         const rtn_bid = row.bid
-        debugLogging(`Row (${rtn_bid}) UPSERTED in Database `, row)
+        if (debugLog) console.log(`Row (${rtn_bid}) UPSERTED in Database `, row)
         //
         //  Unpack data from database & update form values
         //
@@ -449,26 +400,25 @@ export default function BiddingEntry(props) {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseInsert
   }
   //.............................................................................
   //.  DELETE
   //.............................................................................
   const deleteRowData = () => {
-    debugFunStart('deleteRowData')
+    if (debugFunStart) console.log('deleteRowData')
     //
     //  Populate Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_BIDDING,
+      sqlTable: 'bidding',
       sqlWhere: `bid = ${bid}`
     }
     var myPromiseDelete = MyQueryPromise(rowDelete(props))
@@ -476,11 +426,11 @@ export default function BiddingEntry(props) {
     //  Resolve Status
     //
     myPromiseDelete.then(function (data) {
-      debugFunStart('myPromiseDelete')
-      debugLogging('myPromiseDelete Final fulfilled')
+      if (debugFunStart) console.log('myPromiseDelete')
+      if (debugLog) console.log('myPromiseDelete Final fulfilled')
 
       const row = data[0]
-      debugLogging(`Row (${row.bid}) DELETED in Database `)
+      if (debugLog) console.log(`Row (${row.bid}) DELETED in Database `)
       //
       //  Set values to Initial Values
       //
@@ -490,13 +440,13 @@ export default function BiddingEntry(props) {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseDelete
   }
   //...................................................................................
@@ -504,7 +454,7 @@ export default function BiddingEntry(props) {
   // Validate a field
   //
   const validateField = value => {
-    debugFunStart('validateField')
+    if (debugFunStart) console.log('validateField')
     //
     //  Error Message
     //
@@ -529,7 +479,7 @@ export default function BiddingEntry(props) {
     //
     //  Validate THIS field
     //
-    debugFunEnd()
+
     return errMessage
   }
   //...................................................................................
@@ -537,7 +487,7 @@ export default function BiddingEntry(props) {
   // Validate Bids
   //
   const valBidValue = workValues => {
-    debugFunStart('valBidValue')
+    if (debugFunStart) console.log('valBidValue')
     //
     //  Validate bid
     //
@@ -552,7 +502,7 @@ export default function BiddingEntry(props) {
     //
     //  Return Errors flag
     //
-    debugFunEnd()
+
     return errors
   }
   //...................................................................................
@@ -560,7 +510,7 @@ export default function BiddingEntry(props) {
   // Validate Order of bids
   //
   const valBidOrder = workValues => {
-    debugFunStart('valBidOrder')
+    if (debugFunStart) console.log('valBidOrder')
     //
     //  Initial Values
     //
@@ -580,9 +530,7 @@ export default function BiddingEntry(props) {
         //
         let errMessage = ''
         const foundIdx = VALIDBIDS.indexOf(value, fromIdx)
-        foundIdx < 0
-          ? (errMessage = 'Bid out of Order')
-          : (fromIdx = foundIdx + 1)
+        foundIdx < 0 ? (errMessage = 'Bid out of Order') : (fromIdx = foundIdx + 1)
         g_errorsUpd[key] = errMessage
         if (errMessage !== '') errors = true
       }
@@ -590,7 +538,7 @@ export default function BiddingEntry(props) {
     //
     //  Return Errors flag
     //
-    debugFunEnd()
+
     return errors
   }
   //...................................................................................
@@ -598,7 +546,7 @@ export default function BiddingEntry(props) {
   // Validate Bids
   //
   const valBids = workValues => {
-    debugFunStart('valBids')
+    if (debugFunStart) console.log('valBids')
     let errors
     //
     //  Validate bid Value
@@ -608,15 +556,13 @@ export default function BiddingEntry(props) {
     //  Validate bid Order
     //
     if (!errors) valBidOrder(workValues)
-
-    debugFunEnd()
   }
   //...................................................................................
   //
   // Validate the fields
   //
   const validate = (fieldValues = values) => {
-    debugFunStart('Validate')
+    if (debugFunStart) console.log('Validate')
     //
     //  Update g_formValues to values
     //
@@ -649,10 +595,8 @@ export default function BiddingEntry(props) {
     //  Check if every element within the errorsUpd object is blank, then return true (valid), but only on submit when the fieldValues=values
     //
     if (fieldValues === values) {
-      debugFunEnd()
       return Object.values(g_errorsUpd).every(x => x === '')
     }
-    debugFunEnd()
   }
   //...................................................................................
   //
@@ -667,7 +611,7 @@ export default function BiddingEntry(props) {
   //.  Submit form
   //...................................................................................
   const handleSubmit = e => {
-    debugFunStart(handleSubmit)
+    if (debugFunStart) console.log(handleSubmit)
     e.preventDefault()
     //
     //  Validate & Update
@@ -678,18 +622,12 @@ export default function BiddingEntry(props) {
       //
       upsertRowData()
     }
-    debugFunEnd()
   }
   //...................................................................................
   //.  Main Line
   //...................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
-  //
-  //  Define the ValtioStore
-  //
-  const snapShot = useSnapshot(ValtioStore)
-  const URL_BASE = snapShot.v_URL
+
+  if (debugFunStart) console.log(debugModule)
   //
   //  Deconstruct props
   //

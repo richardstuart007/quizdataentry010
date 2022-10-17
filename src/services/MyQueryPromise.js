@@ -5,10 +5,10 @@ import debugSettings from '../debug/debugSettings'
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 function MyQueryPromise(promise) {
-  if (g_log1) console.log('Start MyQueryPromise')
+  if (debugLog) console.log('Start MyQueryPromise')
 
   if (promise.isFulfilled) return promise
 
@@ -22,13 +22,13 @@ function MyQueryPromise(promise) {
     function (v) {
       isFulfilled = true
       isPending = false
-      if (g_log1) console.log(typeof v, v)
+      if (debugLog) console.log(typeof v, v)
       return v
     },
     function (e) {
       isRejected = true
       isPending = false
-      if (g_log1) console.log(typeof e, e)
+      if (debugLog) console.log(typeof e, e)
       throw e
     }
   )
@@ -42,7 +42,7 @@ function MyQueryPromise(promise) {
   result.isRejected = function () {
     return isRejected
   }
-  if (g_log1) console.log(typeof result, result)
+  if (debugLog) console.log(typeof result, result)
   return result
 }
 

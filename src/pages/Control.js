@@ -1,8 +1,4 @@
 //
-//  Libraries
-//
-import { useSnapshot } from 'valtio'
-//
 //  Debug Settings
 //
 import debugSettings from '../debug/debugSettings'
@@ -15,30 +11,24 @@ import ReflinksList from './Reflinks/ReflinksList'
 import Group1List from './Group1/Group1List'
 import Group2List from './Group2/Group2List'
 import Group3List from './Group3/Group3List'
-import ServerData from './ServerData/ServerData'
-//
-//  Utilities
-//
-import { ValtioStore } from './ValtioStore'
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //
 //  Global
 //
 let g_Page
 //===================================================================================
 function Control() {
-  if (g_log1) console.log('Start Control')
+  if (debugLog) console.log('Start Control')
   //.............................................................................
   //  Main Line
   //.............................................................................
   //
-  //  Define the ValtioStore
+  //  Store
   //
-  const snapShot = useSnapshot(ValtioStore)
-  g_Page = snapShot.v_Page
+  g_Page = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
   //
   //  Present the selected component
   //
@@ -55,8 +45,6 @@ function Control() {
       return <Group2List />
     case 'Group3List':
       return <Group3List />
-    case 'ServerData':
-      return <ServerData />
     default:
       return <QuestionList />
   }

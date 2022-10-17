@@ -28,57 +28,20 @@ let actionUpdate = false
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'Group2Entry'
-let debugStack = []
+
 //=====================================================================================
 export default function Group2Entry(props) {
   const { addOrEdit, recordForEdit } = props
 
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
   //...................................................................................
   //
   // Validate the fields
   //
   const validate = (fieldValues = values) => {
-    debugFunStart('validate')
-    debugLogging(fieldValues)
+    if (debugFunStart) console.log('validate')
+    if (debugLog) console.log(fieldValues)
     //
     //  Load previous errors
     //
@@ -89,8 +52,7 @@ export default function Group2Entry(props) {
     if ('g2id' in fieldValues)
       errorsUpd.g2id = fieldValues.g2id === '' ? 'This field is required.' : ''
     if ('g2title' in fieldValues)
-      errorsUpd.g2title =
-        fieldValues.g2title === '' ? 'This field is required.' : ''
+      errorsUpd.g2title = fieldValues.g2title === '' ? 'This field is required.' : ''
     //
     //  Set the errors
     //
@@ -101,51 +63,49 @@ export default function Group2Entry(props) {
     //  Check if every element within the errorsUpd object is blank, then return true (valid), but only on submit when the fieldValues=values
     //
     if (fieldValues === values) {
-      debugFunEnd()
       return Object.values(errorsUpd).every(x => x === '')
     }
-
-    debugFunEnd()
   }
   //...................................................................................
   //
   //  UseMyForm
   //
-  const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
-    useMyForm(initialFValues, true, validate)
+  const { values, setValues, errors, setErrors, handleInputChange, resetForm } = useMyForm(
+    initialFValues,
+    true,
+    validate
+  )
   //...................................................................................
   //.  Submit form
   //...................................................................................
   const handleSubmit = e => {
-    debugFunStart('handleSubmit')
+    if (debugFunStart) console.log('handleSubmit')
     e.preventDefault()
     //
     //  Validate & Update
     //
     if (validate()) {
-      debugLogging('values ', values)
+      if (debugLog) console.log('values ', values)
       const { ...UpdateValues } = { ...values }
-      debugLogging('UpdateValues ', UpdateValues)
+      if (debugLog) console.log('UpdateValues ', UpdateValues)
       //
       //  Update database
       //
-      debugLogging('UpdateValues ', UpdateValues)
+      if (debugLog) console.log('UpdateValues ', UpdateValues)
       addOrEdit(UpdateValues, resetForm)
-
-      debugFunEnd()
     }
   }
   //...................................................................................
   //.  Main Line
   //...................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
+
+  if (debugFunStart) console.log(debugModule)
   //
   //  On change of record, set State
   //
   useEffect(() => {
-    debugLogging('useEffect')
-    debugLogging('recordForEdit ', recordForEdit)
+    if (debugLog) console.log('useEffect')
+    if (debugLog) console.log('recordForEdit ', recordForEdit)
     //
     //  Update form values
     //
@@ -160,7 +120,7 @@ export default function Group2Entry(props) {
   //  Disable entry, allow for Entry
   //
   recordForEdit === null ? (actionUpdate = false) : (actionUpdate = true)
-  debugLogging('actionUpdate', actionUpdate)
+  if (debugLog) console.log('actionUpdate', actionUpdate)
   //
   //  Button Text
   //

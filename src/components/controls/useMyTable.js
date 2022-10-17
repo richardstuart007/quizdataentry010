@@ -40,10 +40,10 @@ const useStyles = makeStyles(theme => ({
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn) {
-  if (g_log1) console.log('Start useMyTable')
+  if (debugLog) console.log('Start useMyTable')
   //
   //  Styles
   //
@@ -59,9 +59,7 @@ export default function useMyTable(records, headCells, filterFn) {
   //.....................................................................................
   //. Table Container
   //.....................................................................................
-  const TblContainer = props => (
-    <Table className={classes.table}>{props.children}</Table>
-  )
+  const TblContainer = props => <Table className={classes.table}>{props.children}</Table>
   //.....................................................................................
   //. Table Header
   //.....................................................................................
@@ -81,10 +79,7 @@ export default function useMyTable(records, headCells, filterFn) {
       <TableHead>
         <TableRow>
           {headCells.map(headCell => (
-            <TableCell
-              key={headCell.id}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
+            <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>
               {headCell.disableSorting ? (
                 headCell.label
               ) : (
@@ -163,10 +158,10 @@ export default function useMyTable(records, headCells, filterFn) {
   //.  Filter, Slice a page, sort
   //.....................................................................................
   const recordsAfterPagingAndSorting = () => {
-    return stableSort(
-      filterFn.fn(records),
-      getComparator(order, orderBy)
-    ).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    return stableSort(filterFn.fn(records), getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      (page + 1) * rowsPerPage
+    )
   }
   //.....................................................................................
   //.  Return Values

@@ -8,66 +8,20 @@ import debugSettings from '../debug/debugSettings'
 import MyQueryPromise from './MyQueryPromise'
 import rowSelect from './rowSelect'
 //
-//  Utilities
-//
-import { ValtioStore } from '../pages/ValtioStore'
-//
-//  Table
-//
-const { SQL_TABLE_GROUP3 } = require('./constants.js')
-//
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'OptionsGroup3'
-let debugStack = []
 
 //===================================================================================
-const OptionsGroup3 = props => {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
+const OptionsGroup3 = () => {
   //...................................................................................
   //.  Load Options
   //...................................................................................
   const LoadOptions = data => {
-    debugFunStart('LoadOptions ')
-    debugLogging('Data ', data)
+    if (debugFunStart) console.log('LoadOptions ')
+    if (debugLog) console.log('Data ', data)
     //
     //  Options
     //
@@ -88,31 +42,28 @@ const OptionsGroup3 = props => {
     //
     //  Store
     //
-    ValtioStore.v_OptionsGroup3 = Options
-    debugLogging('Options ', Options)
-
-    debugFunEnd()
+    sessionStorage.setItem('Data_OptionsGroup3', JSON.stringify(Options))
+    if (debugLog) console.log('Data_OptionsGroup3 ', Options)
   }
   //.............................................................................
   //.  GET Data
   //.............................................................................
   const getRowAll = () => {
-    debugFunStart('getRowAll')
+    if (debugFunStart) console.log('getRowAll')
     //
     //  Process promise
     //
     const props = {
-      sqlURL: sqlURL,
-      sqlTable: SQL_TABLE_GROUP3
+      sqlTable: 'group3'
     }
     var myPromiseGet = MyQueryPromise(rowSelect(props))
     //
     //  Resolve Status
     //
     myPromiseGet.then(function (data) {
-      debugFunStart('myPromiseGet')
-      debugLogging('myPromiseGet Final fulfilled')
-      debugLogging('data ', data)
+      if (debugFunStart) console.log('myPromiseGet')
+      if (debugLog) console.log('myPromiseGet Final fulfilled')
+      if (debugLog) console.log('data ', data)
       //
       //  Load Options from Data
       //
@@ -122,25 +73,20 @@ const OptionsGroup3 = props => {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseGet
   }
   //...................................................................................
   //.  Main Line
   //...................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
-  //
-  //  Deconstruct props
-  //
-  const { sqlURL } = props
-  debugLogging('sqlURL ', sqlURL)
+
+  if (debugFunStart) console.log(debugModule)
   //
   //  SQL server
   //

@@ -19,10 +19,10 @@ const useStyles = makeStyles(theme => ({
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 export default function Notification(props) {
-  if (g_log1) console.log('Start Notification')
+  if (debugLog) console.log('Start Notification')
 
   const { notify, setNotify } = props
   //

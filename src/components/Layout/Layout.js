@@ -1,26 +1,14 @@
 //
 //  Libraries
 //
-import {
-  Typography,
-  AppBar,
-  Toolbar,
-  Avatar,
-  Grid,
-  CardMedia
-} from '@mui/material'
+import { Typography, AppBar, Toolbar, Avatar, Grid, CardMedia } from '@mui/material'
 import makeStyles from '@mui/styles/makeStyles'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useSnapshot } from 'valtio'
 //
 //  Common Sub Components
 //
 import Navigation from '../../pages/Common/Navigation'
-//
-//  Utilities
-//
-import { ValtioStore } from '../../pages/ValtioStore'
 //
 //  Debug Settings
 //
@@ -46,6 +34,9 @@ const useStyles = makeStyles(theme => {
     title: {
       marginLeft: theme.spacing(2)
     },
+    clientserver: {
+      marginLeft: theme.spacing(2)
+    },
     appBar: {
       background: 'green',
       width: '100%'
@@ -59,14 +50,10 @@ const useStyles = makeStyles(theme => {
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //===================================================================================
-export default function Layout({ children }) {
-  if (g_log1) console.log('Start Layout')
-  //
-  //  Define the ValtioStore
-  //
-  const snapShot = useSnapshot(ValtioStore)
+export default function Layout({ handlePage, children }) {
+  if (debugLog) console.log('Start Layout')
   //
   //  Style overrides
   //
@@ -80,7 +67,7 @@ export default function Layout({ children }) {
   //  Title
   //
   let title
-  const CurrentPage = snapShot.v_Page
+  const CurrentPage = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
 
   switch (CurrentPage) {
     case 'QuestionList':
@@ -94,10 +81,13 @@ export default function Layout({ children }) {
       break
   }
   //
-  //  Add server
+  //  Add clientserver
   //
-  const server = snapShot.v_Server
-  title = title + ` (Server:${server})`
+  const ShowClientServer = JSON.parse(sessionStorage.getItem('Settings_DevMode'))
+  const Settings_Client = JSON.parse(sessionStorage.getItem('Settings_Client'))
+  const Settings_Server = JSON.parse(sessionStorage.getItem('Settings_Server'))
+  const Settings_Database = JSON.parse(sessionStorage.getItem('Settings_Database'))
+  const clientserver = `Client(${Settings_Client}) Server(${Settings_Server}) Database(${Settings_Database})`
   //...................................................................................
   //.  Render the component
   //...................................................................................
@@ -106,12 +96,7 @@ export default function Layout({ children }) {
       {/* .......................................................................................... */}
       {/* app bar                                         */}
       {/* .......................................................................................... */}
-      <AppBar
-        position='fixed'
-        className={classes.appBar}
-        elevation={0}
-        color='primary'
-      >
+      <AppBar position='fixed' className={classes.appBar} elevation={0} color='primary'>
         <Toolbar>
           <Grid container alignItems='center'>
             {/* .......................................................................................... */}
@@ -123,18 +108,24 @@ export default function Layout({ children }) {
               <Typography className={classes.title}>{title}</Typography>
             </Grid>
             {/* .......................................................................................... */}
+            {ShowClientServer ? (
+              <Grid item>
+                <Typography
+                  className={classes.clientserver}
+                  sx={{ display: { xs: 'none', sm: 'inline' } }}
+                >
+                  {clientserver}
+                </Typography>
+              </Grid>
+            ) : null}
+            {/* .......................................................................................... */}
             <Grid item xs></Grid>
             {/* .......................................................................................... */}
             <Grid>
-              <CardMedia
-                component='img'
-                sx={{ width: 30, height: 30 }}
-                image={Ukraine}
-                alt=''
-              />
+              <CardMedia component='img' sx={{ width: 30, height: 30 }} image={Ukraine} alt='' />
             </Grid>
             {/* .......................................................................................... */}
-            {ScreenMedium && <Navigation />}
+            {ScreenMedium && <Navigation handlePage={handlePage} />}
             {/* .......................................................................................... */}
           </Grid>
         </Toolbar>
@@ -144,7 +135,7 @@ export default function Layout({ children }) {
       {/* .......................................................................................... */}
       <div className={classes.page}>
         <div className={classes.toolbar}></div>
-        {!ScreenMedium && <Navigation />}
+        {!ScreenMedium && <Navigation handlePage={handlePage} />}
         {children}
       </div>
     </div>

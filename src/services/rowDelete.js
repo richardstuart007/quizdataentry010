@@ -14,7 +14,7 @@ const { URL_TABLES } = require('./constants.js')
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //===================================================================================
 async function rowDelete(props) {
   //--------------------------------------------------------------------
@@ -32,13 +32,13 @@ async function rowDelete(props) {
         sqlAction: 'DELETE',
         sqlWhere: sqlWhere
       }
-      const URL = sqlURL + URL_TABLES
-      if (g_log1) console.log('URL ', URL)
+      const URL = Settings_URL + URL_TABLES
+      if (debugLog) console.log('URL ', URL)
       //
       //  SQL database
       //
       const resultData = await apiAxios(method, URL, body)
-      if (g_log1) console.log('data returned ', resultData)
+      if (debugLog) console.log('data returned ', resultData)
       //
       // No data
       //
@@ -46,7 +46,7 @@ async function rowDelete(props) {
         throw Error('No data received')
       }
       const rowReturned = resultData[0]
-      if (g_log1) console.log('row ', rowReturned)
+      if (debugLog) console.log('row ', rowReturned)
       return resultData
       //
       // Errors
@@ -59,12 +59,17 @@ async function rowDelete(props) {
   //--------------------------------------------------------------------
   //-  Main Line
   //--------------------------------------------------------------------
-  if (g_log1) console.log('Start rowDelete')
+  if (debugLog) console.log('Start rowDelete')
   //
   //  Deconstruct
   //
-  const { sqlURL, sqlTable, sqlWhere } = props
-  if (g_log1) console.log('props: ', props)
+  const { sqlTable, sqlWhere } = props
+  if (debugLog) console.log('props: ', props)
+  //
+  //  Get the URL
+  //
+  const Settings_URL = JSON.parse(sessionStorage.getItem('Settings_URL'))
+  if (debugLog) console.log('Settings_URL ', Settings_URL)
   //
   // Database Update
   //
@@ -72,7 +77,7 @@ async function rowDelete(props) {
   //
   // Return promise
   //
-  if (g_log1) console.log('Return promise', promise)
+  if (debugLog) console.log('Return promise', promise)
   return promise
 }
 

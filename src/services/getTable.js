@@ -17,23 +17,16 @@ const { URL_TABLES } = require('./constants.js')
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //===================================================================================
 async function getTable(props) {
-  if (g_log1) console.log('Start getTable')
-  if (g_log1) console.log('props ', props)
+  if (debugLog) console.log('Start getTable')
+  if (debugLog) console.log('props ', props)
 
   //--------------------------------------------------------------------
   //.  fetch data
   //--------------------------------------------------------------------
-  const fetchItems = async (
-    sqlClient,
-    sqlTable,
-    sqlAction,
-    sqlWhere,
-    sqlOrderByRaw,
-    sqlString
-  ) => {
+  const fetchItems = async (sqlClient, sqlTable, sqlAction, sqlWhere, sqlOrderByRaw, sqlString) => {
     try {
       //
       //  Setup actions
@@ -55,13 +48,13 @@ async function getTable(props) {
             sqlString: sqlString
           })
 
-      const URL = sqlURL + URL_TABLES
-      if (g_log1) console.log('URL ', URL)
+      const URL = Settings_URL + URL_TABLES
+      if (debugLog) console.log('URL ', URL)
       //
       //  SQL database
       //
       const resultData = await apiAxios(method, URL, body)
-      if (g_log1) console.log('Axios Data fetched ', resultData)
+      if (debugLog) console.log('Axios Data fetched ', resultData)
       //
       // No data
       //
@@ -71,7 +64,7 @@ async function getTable(props) {
       //
       // Return data
       //
-      if (g_log1) console.log('Return Data', resultData)
+      if (debugLog) console.log('Return Data', resultData)
       return resultData
       //
       // Errors
@@ -88,37 +81,33 @@ async function getTable(props) {
   //
   const {
     sqlCaller,
-    sqlURL,
     sqlTable,
     sqlAction = 'SELECT',
     sqlWhere = '',
     sqlOrderByRaw = '',
     sqlString = ''
   } = props
-  if (g_log1) console.log('sqlCaller ', sqlCaller)
-  if (g_log1) console.log('sqlURL ', sqlURL)
-  if (g_log1) console.log('sqlTable ', sqlTable)
-  if (g_log1) console.log('sqlAction ', sqlAction)
-  if (g_log1) console.log('sqlWhere ', sqlWhere)
-  if (g_log1) console.log('sqlOrderByRaw ', sqlOrderByRaw)
+  if (debugLog) console.log('sqlCaller ', sqlCaller)
+  if (debugLog) console.log('sqlTable ', sqlTable)
+  if (debugLog) console.log('sqlAction ', sqlAction)
+  if (debugLog) console.log('sqlWhere ', sqlWhere)
+  if (debugLog) console.log('sqlOrderByRaw ', sqlOrderByRaw)
   let sqlClient = `${functionName}/${sqlCaller}`
-  if (g_log1) console.log('sqlClient ', sqlClient)
-  if (g_log1) console.log('sqlString ', sqlString)
+  if (debugLog) console.log('sqlClient ', sqlClient)
+  if (debugLog) console.log('sqlString ', sqlString)
+  //
+  //  Get the URL
+  //
+  const Settings_URL = JSON.parse(sessionStorage.getItem('Settings_URL'))
+  if (debugLog) console.log('Settings_URL ', Settings_URL)
   //
   // Fetch the data
   //
-  const resultData = fetchItems(
-    sqlClient,
-    sqlTable,
-    sqlAction,
-    sqlWhere,
-    sqlOrderByRaw,
-    sqlString
-  )
+  const resultData = fetchItems(sqlClient, sqlTable, sqlAction, sqlWhere, sqlOrderByRaw, sqlString)
   //
   // Return promise
   //
-  if (g_log1) console.log('Return Promise', resultData)
+  if (debugLog) console.log('Return Promise', resultData)
   return resultData
 }
 

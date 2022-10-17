@@ -34,10 +34,10 @@ const useStyles = makeStyles(theme => ({
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 export default function PageHeader(props) {
-  if (g_log1) console.log('Start PageHeader')
+  if (debugLog) console.log('Start PageHeader')
   //
   //  Styles
   //

@@ -9,11 +9,6 @@ import makeStyles from '@mui/styles/makeStyles'
 import PersonIcon from '@mui/icons-material/Person'
 import QuizIcon from '@mui/icons-material/Quiz'
 import GroupIcon from '@mui/icons-material/Group'
-import StorageIcon from '@mui/icons-material/Storage'
-//
-//  Libraries
-//
-import { useSnapshot } from 'valtio'
 //
 //  Debug Settings
 //
@@ -22,10 +17,6 @@ import debugSettings from '../../debug/debugSettings'
 //  Components
 //
 import MyActionButton from '../../components/controls/MyActionButton'
-//
-//  Utilities
-//
-import { ValtioStore } from '../../pages/ValtioStore'
 //
 //  Style overrides
 //
@@ -42,33 +33,13 @@ const useStyles = makeStyles(theme => {
 const debugLog = debugSettings()
 
 //===================================================================================
-export default function Navigation() {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES:', objtext, JSONobj)
-    }
-  }
-
+export default function Navigation({ handlePage }) {
   const classes = useStyles()
   //
-  //  Define the ValtioStore
+  //  Define the Store
   //
-  const snapShot = useSnapshot(ValtioStore)
-  const CurrentPage = snapShot.v_Page
-  debugLogging('CurrentPage', CurrentPage)
+  const CurrentPage = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
+  if (debugLog) console.log('CurrentPage', CurrentPage)
   //...................................................................................
   //.  Render the component
   //...................................................................................
@@ -82,8 +53,7 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'OwnerList'
+              handlePage('OwnerList')
             }}
           >
             Owners
@@ -97,8 +67,7 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'QuestionList'
+              handlePage('QuestionList')
             }}
           >
             Questions
@@ -111,8 +80,7 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'Group1List'
+              handlePage('Group1List')
             }}
           >
             Group1
@@ -125,8 +93,7 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'Group2List'
+              handlePage('Group2List')
             }}
           >
             Group2
@@ -139,8 +106,7 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'Group3List'
+              handlePage('Group3List')
             }}
           >
             Group3
@@ -153,25 +119,10 @@ export default function Navigation() {
             variant='contained'
             color='warning'
             onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'ReflinksList'
+              handlePage('ReflinksList')
             }}
           >
             Reflinks
-          </MyActionButton>
-        ) : null}
-        {/* .......................................................................................... */}
-        {CurrentPage !== 'ServerData' ? (
-          <MyActionButton
-            startIcon={<StorageIcon fontSize='medium' />}
-            variant='contained'
-            color='warning'
-            onClick={() => {
-              ValtioStore.v_PagePrevious = CurrentPage
-              ValtioStore.v_Page = 'ServerData'
-            }}
-          >
-            ServerData
           </MyActionButton>
         ) : null}
         {/* .......................................................................................... */}

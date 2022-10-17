@@ -3,15 +3,7 @@
 //
 import { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
-import {
-  Paper,
-  TableBody,
-  TableRow,
-  TableCell,
-  Toolbar,
-  InputAdornment,
-  Box
-} from '@mui/material'
+import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment, Box } from '@mui/material'
 import makeStyles from '@mui/styles/makeStyles'
 import SearchIcon from '@mui/icons-material/Search'
 import AddIcon from '@mui/icons-material/Add'
@@ -19,11 +11,6 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import { useSnapshot } from 'valtio'
-//
-//  Utilities
-//
-import { ValtioStore } from '../ValtioStore'
 //
 //  Pages
 //
@@ -78,7 +65,6 @@ const useStyles = makeStyles(theme => ({
 //
 //  Group2 Table
 //
-const { SQL_TABLE_GROUP2 } = require('../../services/constants.js')
 const { SQL_ROWS } = require('../../services/constants.js')
 //
 //  Table Heading
@@ -96,60 +82,21 @@ const searchTypeOptions = [
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'Group2List'
-let debugStack = []
 //=====================================================================================
 export default function Group2List() {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
   //.............................................................................
   //.  GET ALL
   //.............................................................................
   const getRowAllData = () => {
-    debugFunStart('getRowAllData')
+    if (debugFunStart) console.log('getRowAllData')
     //
     //  Process promise
     //
     const sqlRows = `FETCH FIRST ${SQL_ROWS} ROWS ONLY`
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_GROUP2,
+      sqlTable: 'group2',
       sqlOrderBy: ' order by g2id',
       sqlRows: sqlRows
     }
@@ -158,7 +105,7 @@ export default function Group2List() {
     //  Resolve Status
     //
     myPromiseGet.then(function (data) {
-      debugLogging('myPromiseGet data ', data)
+      if (debugLog) console.log('myPromiseGet data ', data)
       //
       //  Update Table
       //
@@ -170,26 +117,23 @@ export default function Group2List() {
       //
       //  Return
       //
-      debugFunEnd()
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
     return myPromiseGet
   }
   //.............................................................................
   //.  DELETE
   //.............................................................................
   const deleteRowData = g2id => {
-    debugFunStart('deleteRowData')
+    if (debugFunStart) console.log('deleteRowData')
     //
     //  Populate Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_GROUP2,
+      sqlTable: 'group2',
       sqlWhere: `g2id = '${g2id}'`
     }
     var myPromiseDelete = MyQueryPromise(rowDelete(props))
@@ -197,7 +141,7 @@ export default function Group2List() {
     //  Resolve Status
     //
     myPromiseDelete.then(function (data) {
-      debugLogging('myPromiseDelete data ', data)
+      if (debugLog) console.log('myPromiseDelete data ', data)
       //
       //  Update State - refetch data
       //
@@ -205,48 +149,45 @@ export default function Group2List() {
       //
       //  Return
       //
-      debugFunEnd()
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
     return myPromiseDelete
   }
   //.............................................................................
   //.  INSERT
   //.............................................................................
   const insertRowData = data => {
-    debugFunStart('insertRowData')
+    if (debugFunStart) console.log('insertRowData')
     //
     //  Data Received
     //
-    debugLogging('insertRowData data ', data)
+    if (debugLog) console.log('insertRowData data ', data)
     //
     //  Strip out g2id as it will be populated by Insert
     //
     let { ...rowData } = data
-    debugLogging('Upsert Database rowData ', rowData)
+    if (debugLog) console.log('Upsert Database rowData ', rowData)
     //
     //  Build Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_GROUP2,
+      sqlTable: 'group2',
       sqlKeyName: ['g2id'],
       sqlRow: rowData
     }
     //
     //  Process promise
     //
-    debugLogging('rowUpsert')
+    if (debugLog) console.log('rowUpsert')
     var myPromiseInsert = MyQueryPromise(rowUpsert(props))
     //
     //  Resolve Status
     //
     myPromiseInsert.then(function (data) {
-      debugLogging('myPromiseInsert data ', data)
+      if (debugLog) console.log('myPromiseInsert data ', data)
       //
       //  No data returned
       //
@@ -258,12 +199,12 @@ export default function Group2List() {
         //  Get ID
         //
         const rtn_g2id = data[0].g2id
-        debugLogging(`Row (${rtn_g2id}) UPSERTED in Database`)
+        if (debugLog) console.log(`Row (${rtn_g2id}) UPSERTED in Database`)
         //
         //  Update record for edit with returned data
         //
         setRecordForEdit(data[0])
-        debugLogging(`recordForEdit `, recordForEdit)
+        if (debugLog) console.log(`recordForEdit `, recordForEdit)
       }
       //
       //  Update State - refetch data
@@ -272,35 +213,32 @@ export default function Group2List() {
       //
       //  Return
       //
-      debugFunEnd()
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
     return myPromiseInsert
   }
   //.............................................................................
   //.  UPDATE
   //.............................................................................
   const updateRowData = data => {
-    debugFunStart('updateRowData')
+    if (debugFunStart) console.log('updateRowData')
     //
     //  Data Received
     //
-    debugLogging('updateRowData Row ', data)
+    if (debugLog) console.log('updateRowData Row ', data)
     //
     //  Populate Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_GROUP2,
+      sqlTable: 'group2',
       sqlWhere: `g2id = '${data.g2id}'`,
       sqlRow: data
     }
-    debugLogging('sqlWhere', props.sqlWhere)
-    debugLogging('sqlRow', props.sqlRow)
+    if (debugLog) console.log('sqlWhere', props.sqlWhere)
+    if (debugLog) console.log('sqlRow', props.sqlRow)
     //
     //  Process promise
     //
@@ -309,7 +247,7 @@ export default function Group2List() {
     //  Resolve Status
     //
     myPromiseUpdate.then(function (data) {
-      debugLogging('myPromiseUpdate data ', data)
+      if (debugLog) console.log('myPromiseUpdate data ', data)
       //
       //  No data
       //
@@ -321,7 +259,7 @@ export default function Group2List() {
         //  Get g2id
         //
         const rtn_g2id = data[0].g2id
-        debugLogging(`Row (${rtn_g2id}) UPDATED in Database`)
+        if (debugLog) console.log(`Row (${rtn_g2id}) UPDATED in Database`)
       }
       //
       //  Update State - refetch data
@@ -330,13 +268,11 @@ export default function Group2List() {
       //
       //  Return
       //
-      debugFunEnd()
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
     return myPromiseUpdate
   }
   //.............................................................................
@@ -378,14 +314,13 @@ export default function Group2List() {
   //  Search/Filter
   //
   const handleSearch = () => {
-    debugFunStart('handleSearch')
+    if (debugFunStart) console.log('handleSearch')
     setFilterFn({
       fn: items => {
         //
         //  Nothing to search, return rows
         //
         if (searchValue === '') {
-          debugFunEnd()
           return items
         }
         //
@@ -406,8 +341,7 @@ export default function Group2List() {
 
           default:
         }
-        debugLogging('itemsFilter ', itemsFilter)
-        debugFunEnd()
+        if (debugLog) console.log('itemsFilter ', itemsFilter)
         return itemsFilter
       }
     })
@@ -417,7 +351,7 @@ export default function Group2List() {
   //  Update Database
   //
   const addOrEdit = (row, resetForm) => {
-    debugFunStart('addOrEdit')
+    if (debugFunStart) console.log('addOrEdit')
     recordForEdit === null ? insertRowData(row) : updateRowData(row)
 
     setNotify({
@@ -425,24 +359,22 @@ export default function Group2List() {
       message: 'Submitted Successfully',
       severity: 'success'
     })
-    debugFunEnd()
   }
   //.............................................................................
   //
   //  Data Entry Popup
   //
   const openInPopup = row => {
-    debugFunStart('openInPopup')
+    if (debugFunStart) console.log('openInPopup')
     setRecordForEdit(row)
     setOpenPopup(true)
-    debugFunEnd()
   }
   //.............................................................................
   //
   //  Delete Row
   //
   const onDelete = g2id => {
-    debugFunStart('onDelete')
+    if (debugFunStart) console.log('onDelete')
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
@@ -453,19 +385,13 @@ export default function Group2List() {
       message: 'Deleted Successfully',
       severity: 'error'
     })
-    debugFunEnd()
   }
 
   //...................................................................................
   //.  Main Line
   //...................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
-  //
-  //  Define the ValtioStore
-  //
-  const snapShot = useSnapshot(ValtioStore)
-  const URL_BASE = snapShot.v_URL
+
+  if (debugFunStart) console.log(debugModule)
   //
   //  Initial Data Load
   //
@@ -477,8 +403,11 @@ export default function Group2List() {
   //
   //  Populate the Table
   //
-  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useMyTable(records, headCells, filterFn)
+  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } = useMyTable(
+    records,
+    headCells,
+    filterFn
+  )
   //...................................................................................
   //.  Render the form
   //...................................................................................
@@ -578,18 +507,11 @@ export default function Group2List() {
         </TblContainer>
         <TblPagination />
       </Paper>
-      <Popup
-        title='Group2 Form'
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-      >
+      <Popup title='Group2 Form' openPopup={openPopup} setOpenPopup={setOpenPopup}>
         <Group2Entry recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

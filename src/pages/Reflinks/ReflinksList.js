@@ -3,15 +3,7 @@
 //
 import { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@mui/icons-material/PeopleOutlineTwoTone'
-import {
-  Paper,
-  TableBody,
-  TableRow,
-  TableCell,
-  Toolbar,
-  InputAdornment,
-  Box
-} from '@mui/material'
+import { Paper, TableBody, TableRow, TableCell, Toolbar, InputAdornment, Box } from '@mui/material'
 import makeStyles from '@mui/styles/makeStyles'
 import SearchIcon from '@mui/icons-material/Search'
 import AddIcon from '@mui/icons-material/Add'
@@ -19,11 +11,6 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import { useSnapshot } from 'valtio'
-//
-//  Utilities
-//
-import { ValtioStore } from '../ValtioStore'
 //
 //  Pages
 //
@@ -78,7 +65,6 @@ const useStyles = makeStyles(theme => ({
 //
 //  Table
 //
-const { SQL_TABLE_REFLINKS } = require('../../services/constants.js')
 const { SQL_ROWS } = require('../../services/constants.js')
 //
 //  Table Heading
@@ -104,60 +90,21 @@ const searchTypeOptions = [
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'ReflinksList'
-let debugStack = []
 //=====================================================================================
 export default function ReflinksList() {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
   //.............................................................................
   //.  GET ALL
   //.............................................................................
   const getRowAllData = () => {
-    debugFunStart('getRowAllData')
+    if (debugFunStart) console.log('getRowAllData')
     //
     //  Process promise
     //
     const sqlRows = `FETCH FIRST ${SQL_ROWS} ROWS ONLY`
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_REFLINKS,
+      sqlTable: 'reflinks',
       sqlOrderBy: ' order by rid',
       sqlRows: sqlRows
     }
@@ -166,7 +113,7 @@ export default function ReflinksList() {
     //  Resolve Status
     //
     myPromiseGet.then(function (data) {
-      debugLogging('myPromiseGet data ', data)
+      if (debugLog) console.log('myPromiseGet data ', data)
       //
       //  Update Table
       //
@@ -178,26 +125,25 @@ export default function ReflinksList() {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseGet
   }
   //.............................................................................
   //.  DELETE
   //.............................................................................
   const deleteRowData = rref => {
-    debugFunStart('deleteRowData')
+    if (debugFunStart) console.log('deleteRowData')
     //
     //  Populate Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_REFLINKS,
+      sqlTable: 'reflinks',
       sqlWhere: `rref = '${rref}'`
     }
     var myPromiseDelete = MyQueryPromise(rowDelete(props))
@@ -205,7 +151,7 @@ export default function ReflinksList() {
     //  Resolve Status
     //
     myPromiseDelete.then(function (data) {
-      debugLogging('myPromiseDelete data ', data)
+      if (debugLog) console.log('myPromiseDelete data ', data)
       //
       //  Update State - refetch data
       //
@@ -213,48 +159,47 @@ export default function ReflinksList() {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseDelete
   }
   //.............................................................................
   //.  INSERT
   //.............................................................................
   const insertRowData = data => {
-    debugFunStart('insertRowData')
+    if (debugFunStart) console.log('insertRowData')
     //
     //  Data Received
     //
-    debugLogging('insertRowData data ', data)
+    if (debugLog) console.log('insertRowData data ', data)
     //
     //  Strip out rref as it will be populated by Insert
     //
     let { rid, ...rowData } = data
-    debugLogging('Upsert Database rowData ', rowData)
+    if (debugLog) console.log('Upsert Database rowData ', rowData)
     //
     //  Build Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_REFLINKS,
+      sqlTable: 'reflinks',
       sqlKeyName: ['rref'],
       sqlRow: rowData
     }
     //
     //  Process promise
     //
-    debugLogging('rowUpsert')
+    if (debugLog) console.log('rowUpsert')
     var myPromiseInsert = MyQueryPromise(rowUpsert(props))
     //
     //  Resolve Status
     //
     myPromiseInsert.then(function (data) {
-      debugLogging('myPromiseInsert data ', data)
+      if (debugLog) console.log('myPromiseInsert data ', data)
       //
       //  No data returned
       //
@@ -266,12 +211,12 @@ export default function ReflinksList() {
         //  Get ID
         //
         const rtn_id = data[0].rid
-        debugLogging(`Row (${rtn_id}) UPSERTED in Database`)
+        if (debugLog) console.log(`Row (${rtn_id}) UPSERTED in Database`)
         //
         //  Update record for edit with returned data
         //
         setRecordForEdit(data[0])
-        debugLogging(`recordForEdit `, recordForEdit)
+        if (debugLog) console.log(`recordForEdit `, recordForEdit)
       }
       //
       //  Update State - refetch data
@@ -280,36 +225,35 @@ export default function ReflinksList() {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseInsert
   }
   //.............................................................................
   //.  UPDATE
   //.............................................................................
   const updateRowData = data => {
-    debugFunStart('updateRowData')
+    if (debugFunStart) console.log('updateRowData')
     //
     //  Data Received
     //
-    debugLogging('updateRowData Row ', data)
+    if (debugLog) console.log('updateRowData Row ', data)
     //
     //  Populate Props
     //
     const props = {
-      sqlURL: URL_BASE,
-      sqlTable: SQL_TABLE_REFLINKS,
+      sqlTable: 'reflinks',
       sqlWhere: `rref = '${data.rref}'`,
       sqlRow: data,
       sqlID: 'rid'
     }
-    debugLogging('sqlWhere', props.sqlWhere)
-    debugLogging('sqlRow', props.sqlRow)
+    if (debugLog) console.log('sqlWhere', props.sqlWhere)
+    if (debugLog) console.log('sqlRow', props.sqlRow)
     //
     //  Process promise
     //
@@ -318,7 +262,7 @@ export default function ReflinksList() {
     //  Resolve Status
     //
     myPromiseUpdate.then(function (data) {
-      debugLogging('myPromiseUpdate data ', data)
+      if (debugLog) console.log('myPromiseUpdate data ', data)
       //
       //  No data
       //
@@ -330,7 +274,7 @@ export default function ReflinksList() {
         //  Get rref
         //
         const rtn_rref = data[0].rref
-        debugLogging(`Row (${rtn_rref}) UPDATED in Database`)
+        if (debugLog) console.log(`Row (${rtn_rref}) UPDATED in Database`)
       }
       //
       //  Update State - refetch data
@@ -339,13 +283,13 @@ export default function ReflinksList() {
       //
       //  Return
       //
-      debugFunEnd()
+
       return
     })
     //
     //  Return Promise
     //
-    debugFunEnd()
+
     return myPromiseUpdate
   }
   //.............................................................................
@@ -387,14 +331,13 @@ export default function ReflinksList() {
   //  Search/Filter
   //
   const handleSearch = () => {
-    debugFunStart('handleSearch')
+    if (debugFunStart) console.log('handleSearch')
     setFilterFn({
       fn: items => {
         //
         //  Nothing to search, return rows
         //
         if (searchValue === '') {
-          debugFunEnd()
           return items
         }
         //
@@ -433,8 +376,8 @@ export default function ReflinksList() {
 
           default:
         }
-        debugLogging('itemsFilter ', itemsFilter)
-        debugFunEnd()
+        if (debugLog) console.log('itemsFilter ', itemsFilter)
+
         return itemsFilter
       }
     })
@@ -444,7 +387,7 @@ export default function ReflinksList() {
   //  Update Database
   //
   const addOrEdit = (row, resetForm) => {
-    debugFunStart('addOrEdit')
+    if (debugFunStart) console.log('addOrEdit')
     recordForEdit === null ? insertRowData(row) : updateRowData(row)
 
     setNotify({
@@ -452,24 +395,22 @@ export default function ReflinksList() {
       message: 'Submitted Successfully',
       severity: 'success'
     })
-    debugFunEnd()
   }
   //.............................................................................
   //
   //  Data Entry Popup
   //
   const openInPopup = row => {
-    debugFunStart('openInPopup')
+    if (debugFunStart) console.log('openInPopup')
     setRecordForEdit(row)
     setOpenPopup(true)
-    debugFunEnd()
   }
   //.............................................................................
   //
   //  Delete Row
   //
   const onDelete = rref => {
-    debugFunStart('onDelete')
+    if (debugFunStart) console.log('onDelete')
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
@@ -480,19 +421,13 @@ export default function ReflinksList() {
       message: 'Deleted Successfully',
       severity: 'error'
     })
-    debugFunEnd()
   }
 
   //...................................................................................
   //.  Main Line
   //...................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
-  //
-  //  Define the ValtioStore
-  //
-  const snapShot = useSnapshot(ValtioStore)
-  const URL_BASE = snapShot.v_URL
+
+  if (debugFunStart) console.log(debugModule)
   //
   //  Initial Data Load
   //
@@ -504,8 +439,11 @@ export default function ReflinksList() {
   //
   //  Populate the Table
   //
-  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useMyTable(records, headCells, filterFn)
+  const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } = useMyTable(
+    records,
+    headCells,
+    filterFn
+  )
   //...................................................................................
   //.  Render the form
   //...................................................................................
@@ -609,18 +547,11 @@ export default function ReflinksList() {
         </TblContainer>
         <TblPagination />
       </Paper>
-      <Popup
-        title='Reflink Form'
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-      >
+      <Popup title='Reflink Form' openPopup={openPopup} setOpenPopup={setOpenPopup}>
         <ReflinksEntry recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

@@ -28,19 +28,15 @@ const useStyles = makeStyles(theme => ({
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 export default function Popup(props) {
-  if (g_log1) console.log('Start Popup')
+  if (debugLog) console.log('Start Popup')
   const { title, children, openPopup, setOpenPopup } = props
   const classes = useStyles()
 
   return (
-    <Dialog
-      open={openPopup}
-      maxWidth='md'
-      classes={{ paper: classes.dialogWrapper }}
-    >
+    <Dialog open={openPopup} maxWidth='md' classes={{ paper: classes.dialogWrapper }}>
       <DialogTitle className={classes.dialogTitle}>
         <div style={{ display: 'flex' }}>
           <Typography variant='h6' component='div' style={{ flexGrow: 1 }}>

@@ -52,10 +52,10 @@ const useStyles = makeStyles(theme => ({
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //=====================================================================================
 export default function ConfirmDialog(props) {
-  if (g_log1) console.log('Start ConfirmDialog')
+  if (debugLog) console.log('Start ConfirmDialog')
 
   const { confirmDialog, setConfirmDialog } = props
   const classes = useStyles()
@@ -77,11 +77,7 @@ export default function ConfirmDialog(props) {
           color='primary'
           onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
         />
-        <MyButton
-          text='Yes'
-          color='secondary'
-          onClick={confirmDialog.onConfirm}
-        />
+        <MyButton text='Yes' color='secondary' onClick={confirmDialog.onConfirm} />
       </DialogActions>
     </Dialog>
   )

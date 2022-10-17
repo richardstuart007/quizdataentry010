@@ -14,7 +14,7 @@ const { URL_TABLES } = require('./constants.js')
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //===================================================================================
 async function rowUpdate(props) {
   //--------------------------------------------------------------------
@@ -41,13 +41,13 @@ async function rowUpdate(props) {
         sqlWhere: sqlWhere,
         sqlRow: rowData
       }
-      const URL = sqlURL + URL_TABLES
-      if (g_log1) console.log('URL ', URL)
+      const URL = Settings_URL + URL_TABLES
+      if (debugLog) console.log('URL ', URL)
       //
       //  SQL database
       //
       const resultData = await apiAxios(method, URL, body)
-      if (g_log1) console.log('data returned ', resultData)
+      if (debugLog) console.log('data returned ', resultData)
       //
       // No data
       //
@@ -55,7 +55,7 @@ async function rowUpdate(props) {
         throw Error('No data received')
       }
       const rowReturned = resultData[0]
-      if (g_log1) console.log('row ', rowReturned)
+      if (debugLog) console.log('row ', rowReturned)
       return resultData
       //
       // Errors
@@ -68,12 +68,17 @@ async function rowUpdate(props) {
   //--------------------------------------------------------------------
   //-  Main Line
   //--------------------------------------------------------------------
-  if (g_log1) console.log('Start rowUpdate')
+  if (debugLog) console.log('Start rowUpdate')
   //
   //  Deconstruct
   //
-  const { sqlURL, sqlTable, sqlWhere, sqlRow, sqlID } = props
-  if (g_log1) console.log('props: ', props)
+  const { sqlTable, sqlWhere, sqlRow, sqlID } = props
+  if (debugLog) console.log('props: ', props)
+  //
+  //  Get the URL
+  //
+  const Settings_URL = JSON.parse(sessionStorage.getItem('Settings_URL'))
+  if (debugLog) console.log('Settings_URL ', Settings_URL)
   //
   // Database Update
   //
@@ -81,7 +86,7 @@ async function rowUpdate(props) {
   //
   // Return promise
   //
-  if (g_log1) console.log('Return promise', promise)
+  if (debugLog) console.log('Return promise', promise)
   return promise
 }
 

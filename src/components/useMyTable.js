@@ -41,48 +41,10 @@ const useStyles = makeStyles(theme => ({
 // Debug Settings
 //
 const debugLog = debugSettings()
-const debugFunStartSetting = false
-const debugFunEndSetting = false
+const debugFunStart = false
 const debugModule = 'useMyTable'
-let debugStack = []
 //=====================================================================================
 export default function useMyTable(records, headCells, filterFn) {
-  //.............................................................................
-  //.  Debug Logging
-  //.............................................................................
-  const debugLogging = (objtext, obj) => {
-    if (debugLog) {
-      //
-      //  Object passed
-      //
-      let JSONobj = ''
-      if (obj) {
-        JSONobj = JSON.parse(JSON.stringify(obj))
-      }
-      //
-      //  Output values
-      //
-      console.log('VALUES: Stack ', debugStack, objtext, JSONobj)
-    }
-  }
-  //.............................................................................
-  //.  function start
-  //.............................................................................
-  const debugFunStart = funname => {
-    debugStack.push(funname)
-    if (debugFunStartSetting)
-      console.log('Stack: debugFunStart ==> ', funname, debugStack)
-  }
-  //.............................................................................
-  //.  function End
-  //.............................................................................
-  const debugFunEnd = () => {
-    if (debugStack.length > 1) {
-      const funname = debugStack.pop()
-      if (debugFunEndSetting)
-        console.log('Stack: debugFunEnd <==== ', funname, debugStack)
-    }
-  }
   //.............................................................................
   //
   //  Styles
@@ -99,9 +61,7 @@ export default function useMyTable(records, headCells, filterFn) {
   //.....................................................................................
   //. Table Container
   //.....................................................................................
-  const TblContainer = props => (
-    <Table className={classes.table}>{props.children}</Table>
-  )
+  const TblContainer = props => <Table className={classes.table}>{props.children}</Table>
   //.....................................................................................
   //. Table Header
   //.....................................................................................
@@ -121,10 +81,7 @@ export default function useMyTable(records, headCells, filterFn) {
       <TableHead>
         <TableRow>
           {headCells.map(headCell => (
-            <TableCell
-              key={headCell.id}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
+            <TableCell key={headCell.id} sortDirection={orderBy === headCell.id ? order : false}>
               {headCell.disableSorting ? (
                 headCell.label
               ) : (
@@ -148,19 +105,16 @@ export default function useMyTable(records, headCells, filterFn) {
   //.  Change Page
   //.....................................................................................
   const handleChangePage = (event, newPage) => {
-    debugFunStart('handleChangePage')
-    debugLogging('newPage ', newPage)
+    if (debugLog) console.log('newPage ', newPage)
     setPage(newPage)
-    debugFunEnd()
   }
   //.....................................................................................
   //.  Change Rows per page
   //.....................................................................................
   const handleChangeRowsPerPage = event => {
-    debugFunStart('handleChangeRowsPerPage')
+    if (debugFunStart) console.log('handleChangeRowsPerPage')
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
-    debugFunEnd()
   }
   //.....................................................................................
   //.  Pagination
@@ -208,26 +162,23 @@ export default function useMyTable(records, headCells, filterFn) {
   //.  Filter, Slice a page, sort
   //.....................................................................................
   const recordsAfterPagingAndSorting = () => {
-    debugFunStart('recordsAfterPagingAndSorting')
+    if (debugFunStart) console.log('recordsAfterPagingAndSorting')
 
-    debugLogging('page ', page)
+    if (debugLog) console.log('page ', page)
     // setPage(0)
 
-    const rtnstableSort = stableSort(
-      filterFn.fn(records),
-      getComparator(order, orderBy)
-    ).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    const rtnstableSort = stableSort(filterFn.fn(records), getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      (page + 1) * rowsPerPage
+    )
 
-    debugLogging('rtnstableSort ', rtnstableSort)
-
-    debugFunEnd()
+    if (debugLog) console.log('rtnstableSort ', rtnstableSort)
     return rtnstableSort
   }
   //.....................................................................................
   //.  Return Values
   //.....................................................................................
-  debugStack = []
-  debugFunStart(debugModule)
+  if (debugFunStart) console.log(debugModule)
 
   return {
     TblContainer,

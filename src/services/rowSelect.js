@@ -14,7 +14,7 @@ const { URL_TABLES } = require('./constants.js')
 //
 // Debug Settings
 //
-const g_log1 = debugSettings()
+const debugLog = debugSettings()
 //===================================================================================
 async function rowSelect(props) {
   //--------------------------------------------------------------------
@@ -45,13 +45,13 @@ async function rowSelect(props) {
       //
       //  URL
       //
-      const URL = sqlURL + URL_TABLES
-      if (g_log1) console.log('URL ', URL)
+      const URL = Settings_URL + URL_TABLES
+      if (debugLog) console.log('URL ', URL)
       //
       //  SQL database
       //
       const resultData = await apiAxios(method, URL, body)
-      if (g_log1) console.log('data returned ', resultData)
+      if (debugLog) console.log('data returned ', resultData)
       //
       // Data
       //
@@ -67,12 +67,17 @@ async function rowSelect(props) {
   //--------------------------------------------------------------------
   //-  Main Line
   //--------------------------------------------------------------------
-  if (g_log1) console.log('Start rowSelect')
+  if (debugLog) console.log('Start rowSelect')
   //
   //  Deconstruct props
   //
-  if (g_log1) console.log('props: ', props)
-  const { sqlURL, sqlTable, sqlOrderBy, sqlWhere, sqlRows } = props
+  if (debugLog) console.log('props: ', props)
+  const { sqlTable, sqlOrderBy, sqlWhere, sqlRows } = props
+  //
+  //  Get the URL
+  //
+  const Settings_URL = JSON.parse(sessionStorage.getItem('Settings_URL'))
+  if (debugLog) console.log('Settings_URL ', Settings_URL)
   //
   // Database Update
   //
@@ -80,7 +85,7 @@ async function rowSelect(props) {
   //
   // Return promise
   //
-  if (g_log1) console.log('Return promise', promise)
+  if (debugLog) console.log('Return promise', promise)
   return promise
 }
 
