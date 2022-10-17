@@ -5,7 +5,7 @@
 exports.CLIENT_REMOTE = 'REMOTE'
 exports.SERVER_REMOTE = 'REMOTE'
 exports.DATABASE_REMOTE = 'REMOTE'
-exports.URL_REMOTE = 'https://quizserver010-production.up.railway.app'
+exports.URL_REMOTE = 'https://quizdataentry010.up.railway.app'
 //
 //  Browser Port (9012) ==> Server LOCAL Port (9001) ==> Server REMOTE server
 //
