@@ -2,22 +2,27 @@
 //  Browser Port (9002) ==> Server REMOTE server
 //
 //
-exports.CLIENT_REMOTE = 'REMOTE'
-exports.SERVER_REMOTE = 'REMOTE'
-exports.DATABASE_REMOTE = 'REMOTE'
-exports.URL_REMOTE = 'https://quizserver010-production.up.railway.app'
+exports.REMOTE_CLIENT = 'REMOTE:9002'
+exports.REMOTE_SERVER = 'REMOTE:Railway'
+exports.REMOTE_DATABASE = 'REMOTE:Railway'
+exports.REMOTE_SERVERURL = 'https://quizserver010-production.up.railway.app'
 //
-//  Browser Port (9012) ==> Server LOCAL Port (9001) ==> Server REMOTE server
+//  9002 - Local Client --> Remote Server --> Remote Database
 //
-exports.SERVER_LOCAL_REMOTE = 'LOCAL==>REMOTE'
-exports.URL_LOCAL_REMOTE = 'http://localhost:9001'
+exports.LOC_REMOTE_REMOTE_CLIENT = 'LOCAL:9002'
 //
-//  Browser Port (8002) ==> Server LOCAL Port (8001)
+//  9012 - Local Client --> Local Server --> Remote Database
 //
-exports.CLIENT_LOCAL = 'LOCAL'
-exports.SERVER_LOCAL = 'LOCAL'
-exports.DATABASE_LOCAL = 'LOCAL'
-exports.URL_LOCAL = 'http://localhost:8001'
+exports.LOC_LOC_REMOTE_CLIENT = 'LOCAL:9012'
+exports.LOC_LOC_REMOTE_SERVER = 'LOCAL:9001'
+exports.LOC_LOC_REMOTE_SERVERURL = 'http://localhost:9001'
+//
+//  8002 - Local Client --> Local Server --> Local Database
+//
+exports.LOC_LOC_LOC_CLIENT = 'LOCAL:8002'
+exports.LOC_LOC_LOC_SERVER = 'LOCAL:8001'
+exports.LOC_LOC_LOC_DATABASE = 'LOCAL'
+exports.LOC_LOC_LOC_SERVERURL = 'http://localhost:8001'
 //
 //  Tables
 //
