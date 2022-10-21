@@ -162,11 +162,6 @@ export default function QuestionEntry(props) {
   const OptionsGroup2 = JSON.parse(sessionStorage.getItem('Data_OptionsGroup2'))
   const OptionsGroup3 = JSON.parse(sessionStorage.getItem('Data_OptionsGroup3'))
   const OptionsReflinks = JSON.parse(sessionStorage.getItem('Data_OptionsReflinks'))
-  if (debugLog) console.log('OptionsOwner ', OptionsOwner)
-  if (debugLog) console.log('OptionsGroup1 ', OptionsGroup1)
-  if (debugLog) console.log('OptionsGroup2 ', OptionsGroup2)
-  if (debugLog) console.log('OptionsGroup3 ', OptionsGroup3)
-  if (debugLog) console.log('OptionsReflinks ', OptionsReflinks)
   //
   //  On change of record, set State
   //

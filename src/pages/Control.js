@@ -7,6 +7,7 @@ import debugSettings from '../debug/debugSettings'
 //
 import QuestionList from './Question/QuestionList'
 import OwnerList from './Owner/OwnerList'
+import WhoList from './Who/WhoList'
 import ReflinksList from './Reflinks/ReflinksList'
 import Group1List from './Group1/Group1List'
 import Group2List from './Group2/Group2List'
@@ -39,6 +40,8 @@ function Control() {
       return <OwnerList />
     case 'ReflinksList':
       return <ReflinksList />
+    case 'WhoList':
+      return <WhoList />
     case 'Group1List':
       return <Group1List />
     case 'Group2List':

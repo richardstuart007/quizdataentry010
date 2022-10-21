@@ -14,7 +14,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 //
 //  Pages
 //
-import ReflinksEntry from './ReflinksEntry'
+import WhoEntry from './WhoEntry'
 //
 //  Controls
 //
@@ -38,7 +38,6 @@ import rowUpsert from '../../services/rowUpsert'
 import rowUpdate from '../../services/rowUpdate'
 import rowDelete from '../../services/rowDelete'
 import rowSelect from '../../services/rowSelect'
-import OptionsWho from '../../services/OptionsWho'
 //
 //  Debug Settings
 //
@@ -64,37 +63,29 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 //
-//  Table
+//  Whos Table
 //
 const { SQL_ROWS } = require('../../services/constants.js')
 //
 //  Table Heading
 //
 const headCells = [
-  { id: 'rid', label: 'ID' },
-  { id: 'rref', label: 'Reference' },
-  { id: 'rdesc', label: 'Description' },
-  { id: 'rlink', label: 'Link' },
-  { id: 'rwho', label: 'Who' },
-  { id: 'rtype', label: 'Type' },
+  { id: 'wwho', label: 'Who' },
+  { id: 'wtitle', label: 'Title' },
   { id: 'actions', label: 'Actions', disableSorting: true }
 ]
 const searchTypeOptions = [
-  { id: 'rid', title: 'ID' },
-  { id: 'rref', title: 'Reference' },
-  { id: 'rdesc', title: 'Description' },
-  { id: 'rlink', title: 'Link' },
-  { id: 'rwho', title: 'Who' },
-  { id: 'rtype', title: 'Type' }
+  { id: 'wwho', title: 'Who' },
+  { id: 'wtitle', title: 'Title' }
 ]
 //
 // Debug Settings
 //
 const debugLog = debugSettings()
 const debugFunStart = false
-const debugModule = 'ReflinksList'
+const debugModule = 'WhoList'
 //=====================================================================================
-export default function ReflinksList() {
+export default function WhoList() {
   //.............................................................................
   //.  GET ALL
   //.............................................................................
@@ -105,8 +96,8 @@ export default function ReflinksList() {
     //
     const sqlRows = `FETCH FIRST ${SQL_ROWS} ROWS ONLY`
     const props = {
-      sqlTable: 'reflinks',
-      sqlOrderBy: ' order by rid',
+      sqlTable: 'who',
+      sqlOrderBy: ' order by wwho',
       sqlRows: sqlRows
     }
     var myPromiseGet = MyQueryPromise(rowSelect(props))
@@ -138,14 +129,14 @@ export default function ReflinksList() {
   //.............................................................................
   //.  DELETE
   //.............................................................................
-  const deleteRowData = rref => {
+  const deleteRowData = wwho => {
     if (debugFunStart) console.log('deleteRowData')
     //
     //  Populate Props
     //
     const props = {
-      sqlTable: 'reflinks',
-      sqlWhere: `rref = '${rref}'`
+      sqlTable: 'who',
+      sqlWhere: `wwho = '${wwho}'`
     }
     var myPromiseDelete = MyQueryPromise(rowDelete(props))
     //
@@ -179,16 +170,16 @@ export default function ReflinksList() {
     //
     if (debugLog) console.log('insertRowData data ', data)
     //
-    //  Strip out rref as it will be populated by Insert
+    //  Strip out wwho as it will be populated by Insert
     //
-    let { rid, ...rowData } = data
+    let { ...rowData } = data
     if (debugLog) console.log('Upsert Database rowData ', rowData)
     //
     //  Build Props
     //
     const props = {
-      sqlTable: 'reflinks',
-      sqlKeyName: ['rref'],
+      sqlTable: 'who',
+      sqlKeyName: ['wwho'],
       sqlRow: rowData
     }
     //
@@ -211,8 +202,8 @@ export default function ReflinksList() {
         //
         //  Get ID
         //
-        const rtn_id = data[0].rid
-        if (debugLog) console.log(`Row (${rtn_id}) UPSERTED in Database`)
+        const rtn_wwho = data[0].wwho
+        if (debugLog) console.log(`Row (${rtn_wwho}) UPSERTED in Database`)
         //
         //  Update record for edit with returned data
         //
@@ -248,10 +239,9 @@ export default function ReflinksList() {
     //  Populate Props
     //
     const props = {
-      sqlTable: 'reflinks',
-      sqlWhere: `rref = '${data.rref}'`,
-      sqlRow: data,
-      sqlID: 'rid'
+      sqlTable: 'who',
+      sqlWhere: `wwho = '${data.wwho}'`,
+      sqlRow: data
     }
     if (debugLog) console.log('sqlWhere', props.sqlWhere)
     if (debugLog) console.log('sqlRow', props.sqlRow)
@@ -272,10 +262,10 @@ export default function ReflinksList() {
         throw Error
       } else {
         //
-        //  Get rref
+        //  Get wwho
         //
-        const rtn_rref = data[0].rref
-        if (debugLog) console.log(`Row (${rtn_rref}) UPDATED in Database`)
+        const rtn_wwho = data[0].wwho
+        if (debugLog) console.log(`Row (${rtn_wwho}) UPDATED in Database`)
       }
       //
       //  Update State - refetch data
@@ -309,7 +299,7 @@ export default function ReflinksList() {
     }
   })
   const [openPopup, setOpenPopup] = useState(false)
-  const [searchType, setSearchType] = useState('rref')
+  const [searchType, setSearchType] = useState('wwho')
   const [searchValue, setSearchValue] = useState('')
   //
   //  Notification
@@ -346,32 +336,12 @@ export default function ReflinksList() {
         //
         let itemsFilter = items
         switch (searchType) {
-          case 'rid':
-            itemsFilter = items.filter(x => x.rid === parseInt(searchValue))
+          case 'wwho':
+            itemsFilter = items.filter(x => x.wwho === parseInt(searchValue))
             break
-          case 'rref':
+          case 'wtitle':
             itemsFilter = items.filter(x =>
-              x.rref.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            break
-          case 'rdesc':
-            itemsFilter = items.filter(x =>
-              x.rdesc.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            break
-          case 'rlink':
-            itemsFilter = items.filter(x =>
-              x.rlink.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            break
-          case 'rwho':
-            itemsFilter = items.filter(x =>
-              x.rwho.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            break
-          case 'rtype':
-            itemsFilter = items.filter(x =>
-              x.rtype.toLowerCase().includes(searchValue.toLowerCase())
+              x.wtitle.toLowerCase().includes(searchValue.toLowerCase())
             )
             break
 
@@ -410,13 +380,13 @@ export default function ReflinksList() {
   //
   //  Delete Row
   //
-  const onDelete = rref => {
+  const onDelete = wwho => {
     if (debugFunStart) console.log('onDelete')
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
     })
-    deleteRowData(rref)
+    deleteRowData(wwho)
     setNotify({
       isOpen: true,
       message: 'Deleted Successfully',
@@ -433,7 +403,6 @@ export default function ReflinksList() {
   //  Initial Data Load
   //
   useEffect(() => {
-    OptionsWho()
     getRowAllData()
     // eslint-disable-next-line
   }, [])
@@ -452,7 +421,7 @@ export default function ReflinksList() {
   return (
     <>
       <PageHeader
-        title='Reflinks'
+        title='Whos'
         subTitle='Data Entry and Maintenance'
         icon={<PeopleOutlineTwoToneIcon fontSize='large' />}
       />
@@ -510,13 +479,9 @@ export default function ReflinksList() {
           <TblHead />
           <TableBody>
             {recordsAfterPagingAndSorting().map(row => (
-              <TableRow key={row.rref}>
-                <TableCell>{row.rid}</TableCell>
-                <TableCell>{row.rref}</TableCell>
-                <TableCell>{row.rdesc}</TableCell>
-                <TableCell>{row.rlink}</TableCell>
-                <TableCell>{row.rwho}</TableCell>
-                <TableCell>{row.rtype}</TableCell>
+              <TableRow key={row.wwho}>
+                <TableCell>{row.wwho}</TableCell>
+                <TableCell>{row.wtitle}</TableCell>
 
                 <TableCell>
                   <MyActionButton
@@ -535,7 +500,7 @@ export default function ReflinksList() {
                         title: 'Are you sure to delete this record?',
                         subTitle: "You can't undo this operation",
                         onConfirm: () => {
-                          onDelete(row.rref)
+                          onDelete(row.wwho)
                         }
                       })
                     }}
@@ -549,8 +514,8 @@ export default function ReflinksList() {
         </TblContainer>
         <TblPagination />
       </Paper>
-      <Popup title='Reflink Form' openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        <ReflinksEntry recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+      <Popup title='Who Form' openPopup={openPopup} setOpenPopup={setOpenPopup}>
+        <WhoEntry recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
       <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />

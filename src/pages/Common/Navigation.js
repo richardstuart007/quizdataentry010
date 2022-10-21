@@ -126,6 +126,19 @@ export default function Navigation({ handlePage }) {
           </MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
+        {CurrentPage !== 'WhoList' ? (
+          <MyActionButton
+            startIcon={<PersonIcon fontSize='medium' />}
+            variant='contained'
+            color='warning'
+            onClick={() => {
+              handlePage('WhoList')
+            }}
+          >
+            Who
+          </MyActionButton>
+        ) : null}
+        {/* .......................................................................................... */}
       </Grid>
     </div>
   )

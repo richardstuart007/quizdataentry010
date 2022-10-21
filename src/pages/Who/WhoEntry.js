@@ -12,36 +12,14 @@ import debugSettings from '../../debug/debugSettings'
 //
 import MyButton from '../../components/controls/MyButton'
 import MyInput from '../../components/controls/MyInput'
-import MySelect from '../../components/controls/MySelect'
 import { useMyForm, MyForm } from '../../components/useMyForm'
 //
 //  Form Initial Values
 //
 const initialFValues = {
-  rid: 0,
-  rref: '',
-  rdesc: '',
-  rlink: '',
-  rwho: '',
-  rtype: ''
+  wwho: '',
+  wtitle: ''
 }
-//
-//  Options
-//
-let OptionsType = [
-  {
-    id: 'pdf',
-    title: 'PDF'
-  },
-  {
-    id: 'webdoc',
-    title: 'Web Document'
-  },
-  {
-    id: 'youtube',
-    title: 'YouTube Video'
-  }
-]
 //
 //  Global Variable
 //
@@ -51,10 +29,10 @@ let actionUpdate = false
 //
 const debugLog = debugSettings()
 const debugFunStart = false
-const debugModule = 'ReflinksEntry'
+const debugModule = 'WhoEntry'
 
 //=====================================================================================
-export default function ReflinksEntry(props) {
+export default function WhoEntry(props) {
   const { addOrEdit, recordForEdit } = props
 
   //...................................................................................
@@ -71,16 +49,10 @@ export default function ReflinksEntry(props) {
     //
     //  Validate current field
     //
-    if ('rref' in fieldValues)
-      errorsUpd.rref = fieldValues.rref === '' ? 'This field is required.' : ''
-    if ('rdesc' in fieldValues)
-      errorsUpd.rdesc = fieldValues.rdesc === '' ? 'This field is required.' : ''
-    if ('rlink' in fieldValues)
-      errorsUpd.rlink = fieldValues.rlink === '' ? 'This field is required.' : ''
-    if ('rtype' in fieldValues)
-      errorsUpd.rtype = fieldValues.rtype === '' ? 'This field is required.' : ''
-    if ('rwho' in fieldValues)
-      errorsUpd.rwho = fieldValues.rwho === '' ? 'This field is required.' : ''
+    if ('wwho' in fieldValues)
+      errorsUpd.wwho = fieldValues.wwho === '' ? 'This field is required.' : ''
+    if ('wtitle' in fieldValues)
+      errorsUpd.wtitle = fieldValues.wtitle === '' ? 'This field is required.' : ''
     //
     //  Set the errors
     //
@@ -129,10 +101,6 @@ export default function ReflinksEntry(props) {
 
   if (debugFunStart) console.log(debugModule)
   //
-  //  Define the Store
-  //
-  const OptionsWho = JSON.parse(sessionStorage.getItem('Data_OptionsWho'))
-  //
   //  On change of record, set State
   //
   useEffect(() => {
@@ -167,65 +135,25 @@ export default function ReflinksEntry(props) {
         <Grid container>
           {/*------------------------------------------------------------------------------ */}
 
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <MyInput
-              name='rref'
-              label='Reference'
-              value={values.rref}
+              name='wwho'
+              label='Who'
+              value={values.wwho}
               onChange={handleInputChange}
-              error={errors.rref}
+              error={errors.wwho}
               disabled={actionUpdate}
             />
           </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          {actionUpdate ? (
-            <Grid item xs={4}>
-              <MyInput name='rid' label='ID' value={values.rid} disabled={true} />
-            </Grid>
-          ) : null}
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MyInput
-              name='rdesc'
-              label='Description'
-              value={values.rdesc}
-              onChange={handleInputChange}
-              error={errors.rdesc}
-            />
-          </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MyInput
-              name='rlink'
-              label='Link'
-              value={values.rlink}
-              onChange={handleInputChange}
-              error={errors.rlink}
-            />
-          </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MySelect
-              key={OptionsWho.id}
-              name='rwho'
-              label='Who'
-              value={values.rwho}
-              onChange={handleInputChange}
-              error={errors.rwho}
-              options={OptionsWho}
-            />
-          </Grid>
-          {/*------------------------------------------------------------------------------ */}
 
+          {/*------------------------------------------------------------------------------ */}
           <Grid item xs={12}>
-            <MySelect
-              key={OptionsType.id}
-              name='rtype'
-              label='Type'
-              value={values.rtype}
+            <MyInput
+              name='wtitle'
+              label='Title'
+              value={values.wtitle}
               onChange={handleInputChange}
-              error={errors.rtype}
-              options={OptionsType}
+              error={errors.wtitle}
             />
           </Grid>
           {/*------------------------------------------------------------------------------ */}
