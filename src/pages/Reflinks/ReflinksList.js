@@ -72,6 +72,8 @@ const { SQL_ROWS } = require('../../services/constants.js')
 //
 const headCells = [
   { id: 'rid', label: 'ID' },
+  { id: 'rowner', label: 'Owner' },
+  { id: 'rgroup1', label: 'Group' },
   { id: 'rref', label: 'Reference' },
   { id: 'rdesc', label: 'Description' },
   { id: 'rlink', label: 'Link' },
@@ -81,6 +83,8 @@ const headCells = [
 ]
 const searchTypeOptions = [
   { id: 'rid', title: 'ID' },
+  { id: 'rowner', title: 'Owner' },
+  { id: 'rgroup1', title: 'Group' },
   { id: 'rref', title: 'Reference' },
   { id: 'rdesc', title: 'Description' },
   { id: 'rlink', title: 'Link' },
@@ -349,6 +353,16 @@ export default function ReflinksList() {
           case 'rid':
             itemsFilter = items.filter(x => x.rid === parseInt(searchValue))
             break
+          case 'rowner':
+            itemsFilter = items.filter(x =>
+              x.rowner.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            break
+          case 'rgroup1':
+            itemsFilter = items.filter(x =>
+              x.rgroup1.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            break
           case 'rref':
             itemsFilter = items.filter(x =>
               x.rref.toLowerCase().includes(searchValue.toLowerCase())
@@ -512,6 +526,8 @@ export default function ReflinksList() {
             {recordsAfterPagingAndSorting().map(row => (
               <TableRow key={row.rref}>
                 <TableCell>{row.rid}</TableCell>
+                <TableCell>{row.rowner}</TableCell>
+                <TableCell>{row.rgroup1}</TableCell>
                 <TableCell>{row.rref}</TableCell>
                 <TableCell>{row.rdesc}</TableCell>
                 <TableCell>{row.rlink}</TableCell>

@@ -19,6 +19,8 @@ import { useMyForm, MyForm } from '../../components/useMyForm'
 //
 const initialFValues = {
   rid: 0,
+  rowner: '',
+  rgroup1: '',
   rref: '',
   rdesc: '',
   rlink: '',
@@ -53,10 +55,44 @@ const debugLog = debugSettings()
 const debugFunStart = false
 const debugModule = 'ReflinksEntry'
 
-//=====================================================================================
+//...................................................................................
+//.  Main Line
+//...................................................................................
 export default function ReflinksEntry(props) {
   const { addOrEdit, recordForEdit } = props
-
+  if (debugFunStart) console.log(debugModule)
+  //
+  //  Define the Store
+  //
+  const OptionsWho = JSON.parse(sessionStorage.getItem('Data_OptionsWho'))
+  const OptionsOwner = JSON.parse(sessionStorage.getItem('Data_OptionsOwner'))
+  const OptionsGroup1 = JSON.parse(sessionStorage.getItem('Data_OptionsGroup1'))
+  //
+  //  On change of record, set State
+  //
+  useEffect(() => {
+    if (debugLog) console.log('useEffect')
+    if (debugLog) console.log('recordForEdit ', recordForEdit)
+    //
+    //  Update form values
+    //
+    if (recordForEdit) {
+      setValues({
+        ...recordForEdit
+      })
+    }
+    // eslint-disable-next-line
+  }, [recordForEdit])
+  //
+  //  Disable/Allow entry
+  //
+  recordForEdit === null ? (actionUpdate = false) : (actionUpdate = true)
+  if (debugLog) console.log('actionUpdate', actionUpdate)
+  //
+  //  Button Text
+  //
+  let submitButtonText
+  actionUpdate ? (submitButtonText = 'Update') : (submitButtonText = 'Add')
   //...................................................................................
   //
   // Validate the fields
@@ -73,6 +109,10 @@ export default function ReflinksEntry(props) {
     //
     if ('rref' in fieldValues)
       errorsUpd.rref = fieldValues.rref === '' ? 'This field is required.' : ''
+    if ('rowner' in fieldValues)
+      errorsUpd.rowner = fieldValues.rowner === '' ? 'This field is required.' : ''
+    if ('rgroup1' in fieldValues)
+      errorsUpd.rgroup1 = fieldValues.rgroup1 === '' ? 'This field is required.' : ''
     if ('rdesc' in fieldValues)
       errorsUpd.rdesc = fieldValues.rdesc === '' ? 'This field is required.' : ''
     if ('rlink' in fieldValues)
@@ -123,41 +163,7 @@ export default function ReflinksEntry(props) {
       addOrEdit(UpdateValues, resetForm)
     }
   }
-  //...................................................................................
-  //.  Main Line
-  //...................................................................................
 
-  if (debugFunStart) console.log(debugModule)
-  //
-  //  Define the Store
-  //
-  const OptionsWho = JSON.parse(sessionStorage.getItem('Data_OptionsWho'))
-  //
-  //  On change of record, set State
-  //
-  useEffect(() => {
-    if (debugLog) console.log('useEffect')
-    if (debugLog) console.log('recordForEdit ', recordForEdit)
-    //
-    //  Update form values
-    //
-    if (recordForEdit) {
-      setValues({
-        ...recordForEdit
-      })
-    }
-    // eslint-disable-next-line
-  }, [recordForEdit])
-  //
-  //  Disable/Allow entry
-  //
-  recordForEdit === null ? (actionUpdate = false) : (actionUpdate = true)
-  if (debugLog) console.log('actionUpdate', actionUpdate)
-  //
-  //  Button Text
-  //
-  let submitButtonText
-  actionUpdate ? (submitButtonText = 'Update') : (submitButtonText = 'Add')
   //...................................................................................
   //.  Render the form
   //...................................................................................
@@ -183,6 +189,30 @@ export default function ReflinksEntry(props) {
               <MyInput name='rid' label='ID' value={values.rid} disabled={true} />
             </Grid>
           ) : null}
+          {/*------------------------------------------------------------------------------ */}
+          <Grid item xs={12}>
+            <MySelect
+              key={OptionsOwner.id}
+              name='rowner'
+              label='Owner'
+              value={values.rowner}
+              onChange={handleInputChange}
+              error={errors.rowner}
+              options={OptionsOwner}
+            />
+          </Grid>
+          {/*------------------------------------------------------------------------------ */}
+          <Grid item xs={12}>
+            <MySelect
+              key={OptionsGroup1.id}
+              name='rgroup1'
+              label='Group'
+              value={values.rgroup1}
+              onChange={handleInputChange}
+              error={errors.rgroup1}
+              options={OptionsGroup1}
+            />
+          </Grid>
           {/*------------------------------------------------------------------------------ */}
           <Grid item xs={12}>
             <MyInput
@@ -216,7 +246,6 @@ export default function ReflinksEntry(props) {
             />
           </Grid>
           {/*------------------------------------------------------------------------------ */}
-
           <Grid item xs={12}>
             <MySelect
               key={OptionsType.id}
