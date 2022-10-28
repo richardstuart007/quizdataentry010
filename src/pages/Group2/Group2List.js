@@ -39,6 +39,10 @@ import rowUpdate from '../../services/rowUpdate'
 import rowDelete from '../../services/rowDelete'
 import rowSelect from '../../services/rowSelect'
 //
+//  Options
+//
+import OptionsGroup2 from '../../services/OptionsGroup2'
+//
 //  Debug Settings
 //
 import debugSettings from '../../debug/debugSettings'
@@ -146,6 +150,7 @@ export default function Group2List() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsGroup2()
       //
       //  Return
       //
@@ -210,6 +215,7 @@ export default function Group2List() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsGroup2()
       //
       //  Return
       //
@@ -265,6 +271,7 @@ export default function Group2List() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsGroup2()
       //
       //  Return
       //

@@ -39,6 +39,10 @@ import rowUpdate from '../../services/rowUpdate'
 import rowDelete from '../../services/rowDelete'
 import rowSelect from '../../services/rowSelect'
 //
+//  Options
+//
+import OptionsWho from '../../services/OptionsWho'
+//
 //  Debug Settings
 //
 import debugSettings from '../../debug/debugSettings'
@@ -148,6 +152,7 @@ export default function WhoList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsWho()
       //
       //  Return
       //
@@ -214,6 +219,7 @@ export default function WhoList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsWho()
       //
       //  Return
       //
@@ -271,6 +277,7 @@ export default function WhoList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsWho()
       //
       //  Return
       //

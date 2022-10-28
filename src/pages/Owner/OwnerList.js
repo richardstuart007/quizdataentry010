@@ -39,6 +39,10 @@ import rowUpdate from '../../services/rowUpdate'
 import rowDelete from '../../services/rowDelete'
 import rowSelect from '../../services/rowSelect'
 //
+//  Options
+//
+import OptionsOwner from '../../services/OptionsOwner'
+//
 //  Debug Settings
 //
 import debugSettings from '../../debug/debugSettings'
@@ -148,6 +152,7 @@ export default function OwnerList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsOwner()
       //
       //  Return
       //
@@ -214,6 +219,7 @@ export default function OwnerList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsOwner()
       //
       //  Return
       //
@@ -271,6 +277,7 @@ export default function OwnerList() {
       //  Update State - refetch data
       //
       getRowAllData()
+      OptionsOwner()
       //
       //  Return
       //
