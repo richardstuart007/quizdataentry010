@@ -36,8 +36,8 @@ const OptionsGroup1 = () => {
     //
     //  Store
     //
-    sessionStorage.setItem('Data_OptionsGroup1', JSON.stringify(Options))
-    if (debugLog) console.log('Data_OptionsGroup1 ', Options)
+    sessionStorage.setItem('Data_Options_Group1', JSON.stringify(Options))
+    if (debugLog) console.log('Data_Options_Group1 ', Options)
   }
   //.............................................................................
   //.  GET Data

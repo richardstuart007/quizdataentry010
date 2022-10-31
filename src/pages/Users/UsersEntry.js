@@ -2,7 +2,7 @@
 //  Libraries
 //
 import { useEffect } from 'react'
-import { Grid } from '@mui/material'
+import { Grid, Box } from '@mui/material'
 //
 //  Debug Settings
 //
@@ -12,38 +12,25 @@ import debugSettings from '../../debug/debugSettings'
 //
 import MyButton from '../../components/controls/MyButton'
 import MyInput from '../../components/controls/MyInput'
+import MyCheckbox from '../../components/controls/MyCheckbox'
 import MySelect from '../../components/controls/MySelect'
 import { useMyForm, MyForm } from '../../components/useMyForm'
 //
 //  Form Initial Values
 //
 const initialFValues = {
-  rid: 0,
-  rowner: '',
-  rgroup1: '',
-  rref: '',
-  rdesc: '',
-  rlink: '',
-  rwho: '',
-  rtype: ''
+  u_email: '',
+  u_name: '',
+  u_admin: false,
+  u_showprogress: true,
+  u_showscore: true,
+  u_sortquestions: true,
+  u_skipcorrect: true,
+  u_dftmaxquestions: 5,
+  u_dftowner: '',
+  u_fedcountry: '',
+  u_fedid: ''
 }
-//
-//  Options
-//
-let OptionsType = [
-  {
-    id: 'pdf',
-    title: 'PDF'
-  },
-  {
-    id: 'webdoc',
-    title: 'Web Document'
-  },
-  {
-    id: 'youtube',
-    title: 'YouTube Video'
-  }
-]
 //
 //  Global Variable
 //
@@ -53,20 +40,17 @@ let actionUpdate = false
 //
 const debugLog = debugSettings()
 const debugFunStart = false
-const debugModule = 'ReflinksEntry'
+const debugModule = 'UsersEntry'
 
 //...................................................................................
 //.  Main Line
 //...................................................................................
-export default function ReflinksEntry(props) {
-  const { addOrEdit, recordForEdit } = props
+export default function UsersEntry(props) {
   if (debugFunStart) console.log(debugModule)
   //
-  //  Define the Store
+  //  Deconstruct props
   //
-  const OptionsWho = JSON.parse(sessionStorage.getItem('Data_Options_Who'))
-  const OptionsOwner = JSON.parse(sessionStorage.getItem('Data_Options_Owner'))
-  const OptionsGroup1 = JSON.parse(sessionStorage.getItem('Data_Options_Group1'))
+  const { addOrEdit, recordForEdit } = props
   //
   //  On change of record, set State
   //
@@ -93,6 +77,11 @@ export default function ReflinksEntry(props) {
   //
   let submitButtonText
   actionUpdate ? (submitButtonText = 'Update') : (submitButtonText = 'Add')
+  //
+  //  Get Store
+  //
+  const OptionsOwner = JSON.parse(sessionStorage.getItem('Data_Options_Owner'))
+  if (debugLog) console.log('OptionsOwner ', OptionsOwner)
   //...................................................................................
   //
   // Validate the fields
@@ -107,20 +96,18 @@ export default function ReflinksEntry(props) {
     //
     //  Validate current field
     //
-    if ('rref' in fieldValues)
-      errorsUpd.rref = fieldValues.rref === '' ? 'This field is required.' : ''
-    if ('rowner' in fieldValues)
-      errorsUpd.rowner = fieldValues.rowner === '' ? 'This field is required.' : ''
-    if ('rgroup1' in fieldValues)
-      errorsUpd.rgroup1 = fieldValues.rgroup1 === '' ? 'This field is required.' : ''
-    if ('rdesc' in fieldValues)
-      errorsUpd.rdesc = fieldValues.rdesc === '' ? 'This field is required.' : ''
-    if ('rlink' in fieldValues)
-      errorsUpd.rlink = fieldValues.rlink === '' ? 'This field is required.' : ''
-    if ('rtype' in fieldValues)
-      errorsUpd.rtype = fieldValues.rtype === '' ? 'This field is required.' : ''
-    if ('rwho' in fieldValues)
-      errorsUpd.rwho = fieldValues.rwho === '' ? 'This field is required.' : ''
+    if ('u_email' in fieldValues)
+      errorsUpd.u_email = fieldValues.u_email === '' ? 'This field is required.' : ''
+    if ('u_name' in fieldValues)
+      errorsUpd.u_name = fieldValues.u_name === '' ? 'This field is required.' : ''
+    //
+    //  MaxQuestions
+    //
+    if ('u_dftmaxquestions' in fieldValues)
+      errorsUpd.u_dftmaxquestions =
+        parseInt(fieldValues.u_dftmaxquestions) > 0 && parseInt(fieldValues.u_dftmaxquestions) <= 50
+          ? ''
+          : `You must select between 1 and 50.`
     //
     //  Set the errors
     //
@@ -172,91 +159,132 @@ export default function ReflinksEntry(props) {
       <MyForm onSubmit={handleSubmit}>
         <Grid container>
           {/*------------------------------------------------------------------------------ */}
-
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <MyInput
-              name='rref'
-              label='Reference'
-              value={values.rref}
+              name='u_email'
+              label='Email'
+              value={values.u_email}
               onChange={handleInputChange}
-              error={errors.rref}
+              error={errors.u_email}
               disabled={actionUpdate}
             />
           </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          {actionUpdate ? (
-            <Grid item xs={4}>
-              <MyInput name='rid' label='ID' value={values.rid} disabled={true} />
-            </Grid>
-          ) : null}
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MySelect
-              key={OptionsOwner.id}
-              name='rowner'
-              label='Owner'
-              value={values.rowner}
-              onChange={handleInputChange}
-              error={errors.rowner}
-              options={OptionsOwner}
-            />
-          </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MySelect
-              key={OptionsGroup1.id}
-              name='rgroup1'
-              label='Group'
-              value={values.rgroup1}
-              onChange={handleInputChange}
-              error={errors.rgroup1}
-              options={OptionsGroup1}
-            />
-          </Grid>
-          {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
+
+          <Grid item xs={6}>
             <MyInput
-              name='rdesc'
-              label='Description'
-              value={values.rdesc}
+              name='u_name'
+              label='Name'
+              value={values.u_name}
               onChange={handleInputChange}
-              error={errors.rdesc}
+              error={errors.u_name}
             />
           </Grid>
           {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MyInput
-              name='rlink'
-              label='Link'
-              value={values.rlink}
+          <Grid item xs={6}>
+            <Box sx={{ mt: 2, maxWidth: 200 }}>
+              <MyInput
+                name='u_fedcountry'
+                label='Bridge Federation Country'
+                value={values.u_fedcountry}
+                onChange={handleInputChange}
+                error={errors.u_fedcountry}
+              />
+            </Box>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Box sx={{ mt: 2, maxWidth: 200 }}>
+              <MyInput
+                name='u_fedid'
+                label='Bridge Federation ID'
+                value={values.u_fedid}
+                onChange={handleInputChange}
+                error={errors.u_fedid}
+              />
+            </Box>
+          </Grid>
+          {/*------------------------------------------------------------------------------ */}
+
+          <Grid item xs={6}>
+            <MyCheckbox
+              name='u_admin'
+              label='Administrator'
+              value={values.u_admin}
               onChange={handleInputChange}
-              error={errors.rlink}
+              error={errors.u_admin}
+            />
+          </Grid>
+          <Grid item xs={6}></Grid>
+          {/*------------------------------------------------------------------------------ */}
+          <Grid item xs={6}>
+            <MyCheckbox
+              name='u_showprogress'
+              label='Show Linear Progress'
+              value={values.u_showprogress}
+              onChange={handleInputChange}
+              error={errors.u_showprogress}
+            />
+          </Grid>
+
+          <Grid item xs={6}>
+            <MyCheckbox
+              name='u_showscore'
+              label='Show Linear Score'
+              value={values.u_showscore}
+              onChange={handleInputChange}
+              error={errors.u_showscore}
             />
           </Grid>
           {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MySelect
-              key={OptionsWho.id}
-              name='rwho'
-              label='Who'
-              value={values.rwho}
+          <Grid item xs={6}>
+            <MyCheckbox
+              name='u_sortquestions'
+              label='Sort Questions'
+              value={values.u_sortquestions}
               onChange={handleInputChange}
-              error={errors.rwho}
-              options={OptionsWho}
+              error={errors.u_sortquestions}
             />
           </Grid>
+
+          <Grid item xs={6}>
+            <MyCheckbox
+              name='u_skipcorrect'
+              label='Skip Correct Answers'
+              value={values.u_skipcorrect}
+              onChange={handleInputChange}
+              error={errors.u_skipcorrect}
+            />
+          </Grid>
+
           {/*------------------------------------------------------------------------------ */}
-          <Grid item xs={12}>
-            <MySelect
-              key={OptionsType.id}
-              name='rtype'
-              label='Type'
-              value={values.rtype}
-              onChange={handleInputChange}
-              error={errors.rtype}
-              options={OptionsType}
-            />
+          <Grid item xs={3}>
+            <Box sx={{ mt: 2, maxWidth: 200 }}>
+              <MyInput
+                name='u_dftmaxquestions'
+                label='Default Maximum Questions'
+                value={values.u_dftmaxquestions}
+                onChange={handleInputChange}
+                error={errors.u_dftmaxquestions}
+              />
+            </Box>
           </Grid>
+          <Grid item xs={9}></Grid>
+          {/*------------------------------------------------------------------------------ */}
+          <Grid item xs={3}>
+            <Box sx={{ mt: 2, maxWidth: 200 }}>
+              <MySelect
+                key={OptionsOwner.id}
+                name='u_dftowner'
+                label='Default Owner'
+                value={values.u_dftowner}
+                onChange={handleInputChange}
+                error={errors.u_dftowner}
+                options={OptionsOwner}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={9}></Grid>
+
           {/*------------------------------------------------------------------------------ */}
           <Grid item xs={2}>
             <MyButton type='submit' text={submitButtonText} />

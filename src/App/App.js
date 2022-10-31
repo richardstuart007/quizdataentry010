@@ -101,19 +101,17 @@ export default function App() {
     //
     //  Update Previous Page
     //
-    sessionStorage.setItem('Settings_Page_Previous', JSON.stringify(CurrentPage))
+    sessionStorage.setItem('Nav_Page_Previous', JSON.stringify(CurrentPage))
     if (debugLog)
       console.log(
-        `UPDATED PREVIOUS_Page ${JSON.parse(sessionStorage.getItem('Settings_Page_Previous'))}`
+        `UPDATED PREVIOUS_Page ${JSON.parse(sessionStorage.getItem('Nav_Page_Previous'))}`
       )
     //
     //  Update NEW Page
     //
-    sessionStorage.setItem('Settings_Page_Current', JSON.stringify(nextPage))
+    sessionStorage.setItem('Nav_Page_Current', JSON.stringify(nextPage))
     if (debugLog)
-      console.log(
-        `UPDATED CURRENT_PAGE ${JSON.parse(sessionStorage.getItem('Settings_Page_Current'))}`
-      )
+      console.log(`UPDATED CURRENT_PAGE ${JSON.parse(sessionStorage.getItem('Nav_Page_Current'))}`)
     //
     //  Update State
     //
@@ -172,10 +170,10 @@ export default function App() {
     //
     //  Store Client, Server, Database, URL
     //
-    sessionStorage.setItem('Settings_Client', JSON.stringify(w_Client))
-    sessionStorage.setItem('Settings_Server', JSON.stringify(w_Server))
-    sessionStorage.setItem('Settings_Database', JSON.stringify(w_Database))
-    sessionStorage.setItem('Settings_URL', JSON.stringify(w_URL))
+    sessionStorage.setItem('App_Settings_Client', JSON.stringify(w_Client))
+    sessionStorage.setItem('App_Settings_Server', JSON.stringify(w_Server))
+    sessionStorage.setItem('App_Settings_Database', JSON.stringify(w_Database))
+    sessionStorage.setItem('App_Settings_URL', JSON.stringify(w_URL))
     if (debugLog)
       console.log(
         `QuizClient-PORT(${port}) CLIENT(${w_Client}) SERVER(${w_Server}) DATABASE(${w_Database}) URL(${w_URL})`
@@ -183,10 +181,10 @@ export default function App() {
     //
     //  Session Storage
     //
-    sessionStorage.setItem('Settings_Page_Previous', JSON.stringify(''))
-    let Settings_DevMode
-    w_Client === REMOTE_CLIENT ? (Settings_DevMode = false) : (Settings_DevMode = true)
-    sessionStorage.setItem('Settings_DevMode', Settings_DevMode)
+    sessionStorage.setItem('Nav_Page_Previous', JSON.stringify(''))
+    let App_Settings_DevMode
+    w_Client === REMOTE_CLIENT ? (App_Settings_DevMode = false) : (App_Settings_DevMode = true)
+    sessionStorage.setItem('App_Settings_DevMode', App_Settings_DevMode)
   }
   //.............................................................................
   //

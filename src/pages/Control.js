@@ -8,6 +8,7 @@ import debugSettings from '../debug/debugSettings'
 import QuestionList from './Question/QuestionList'
 import OwnerList from './Owner/OwnerList'
 import WhoList from './Who/WhoList'
+import UsersList from './Users/UsersList'
 import ReflinksList from './Reflinks/ReflinksList'
 import Group1List from './Group1/Group1List'
 import Group2List from './Group2/Group2List'
@@ -29,7 +30,7 @@ function Control() {
   //
   //  Store
   //
-  g_Page = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
+  g_Page = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
   //
   //  Present the selected component
   //
@@ -42,6 +43,8 @@ function Control() {
       return <ReflinksList />
     case 'WhoList':
       return <WhoList />
+    case 'UsersList':
+      return <UsersList />
     case 'Group1List':
       return <Group1List />
     case 'Group2List':

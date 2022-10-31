@@ -38,7 +38,7 @@ export default function Navigation({ handlePage }) {
   //
   //  Define the Store
   //
-  const CurrentPage = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
+  const CurrentPage = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
   if (debugLog) console.log('CurrentPage', CurrentPage)
   //...................................................................................
   //.  Render the component
@@ -136,6 +136,19 @@ export default function Navigation({ handlePage }) {
             }}
           >
             Who
+          </MyActionButton>
+        ) : null}
+        {/* .......................................................................................... */}
+        {CurrentPage !== 'UsersList' ? (
+          <MyActionButton
+            startIcon={<PersonIcon fontSize='medium' />}
+            variant='contained'
+            color='warning'
+            onClick={() => {
+              handlePage('UsersList')
+            }}
+          >
+            Users
           </MyActionButton>
         ) : null}
         {/* .......................................................................................... */}

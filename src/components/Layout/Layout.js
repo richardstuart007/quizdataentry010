@@ -67,7 +67,7 @@ export default function Layout({ handlePage, children }) {
   //  Title
   //
   let title
-  const CurrentPage = JSON.parse(sessionStorage.getItem('Settings_Page_Current'))
+  const CurrentPage = JSON.parse(sessionStorage.getItem('Nav_Page_Current'))
 
   switch (CurrentPage) {
     case 'QuestionList':
@@ -83,11 +83,11 @@ export default function Layout({ handlePage, children }) {
   //
   //  Add clientserver
   //
-  const ShowClientServer = JSON.parse(sessionStorage.getItem('Settings_DevMode'))
-  const Settings_Client = JSON.parse(sessionStorage.getItem('Settings_Client'))
-  const Settings_Server = JSON.parse(sessionStorage.getItem('Settings_Server'))
-  const Settings_Database = JSON.parse(sessionStorage.getItem('Settings_Database'))
-  const clientserver = `Client(${Settings_Client}) Server(${Settings_Server}) Database(${Settings_Database})`
+  const ShowClientServer = JSON.parse(sessionStorage.getItem('App_Settings_DevMode'))
+  const App_Settings_Client = JSON.parse(sessionStorage.getItem('App_Settings_Client'))
+  const App_Settings_Server = JSON.parse(sessionStorage.getItem('App_Settings_Server'))
+  const App_Settings_Database = JSON.parse(sessionStorage.getItem('App_Settings_Database'))
+  const clientserver = `Client(${App_Settings_Client}) Server(${App_Settings_Server}) Database(${App_Settings_Database})`
   //...................................................................................
   //.  Render the component
   //...................................................................................

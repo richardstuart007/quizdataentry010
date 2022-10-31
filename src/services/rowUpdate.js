@@ -41,7 +41,7 @@ async function rowUpdate(props) {
         sqlWhere: sqlWhere,
         sqlRow: rowData
       }
-      const URL = Settings_URL + URL_TABLES
+      const URL = App_Settings_URL + URL_TABLES
       if (debugLog) console.log('URL ', URL)
       //
       //  SQL database
@@ -77,8 +77,8 @@ async function rowUpdate(props) {
   //
   //  Get the URL
   //
-  const Settings_URL = JSON.parse(sessionStorage.getItem('Settings_URL'))
-  if (debugLog) console.log('Settings_URL ', Settings_URL)
+  const App_Settings_URL = JSON.parse(sessionStorage.getItem('App_Settings_URL'))
+  if (debugLog) console.log('App_Settings_URL ', App_Settings_URL)
   //
   // Database Update
   //
