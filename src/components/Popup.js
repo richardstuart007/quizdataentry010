@@ -43,13 +43,12 @@ export default function Popup(props) {
             {title}
           </Typography>
           <MyActionButton
+            startIcon={<CloseIcon fontSize='small' />}
             color='secondary'
             onClick={() => {
               setOpenPopup(false)
             }}
-          >
-            <CloseIcon />
-          </MyActionButton>
+          ></MyActionButton>
         </div>
       </DialogTitle>
       <DialogContent dividers>{children}</DialogContent>

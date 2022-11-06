@@ -55,11 +55,16 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   searchInput: {
-    width: '40%'
+    minWidth: '300px',
+    width: '30%'
   },
   searchInputTypeBox: {
+    minWidth: '150px',
     width: '10%',
     margin: `0 0 0 ${theme.spacing(2)}`
+  },
+  myButton: {
+    margin: `0 0 0 ${theme.spacing(4)}`
   },
   newButton: {
     position: 'absolute',
@@ -456,12 +461,14 @@ export default function Group1List() {
             variant='outlined'
             startIcon={<FilterListIcon />}
             onClick={handleSearch}
+            className={classes.myButton}
           />
           <MyButton
             text='Refresh'
             variant='outlined'
             startIcon={<RefreshIcon />}
             onClick={getRowAllData}
+            className={classes.myButton}
           />
 
           <MyButton
@@ -485,14 +492,14 @@ export default function Group1List() {
 
                 <TableCell>
                   <MyActionButton
+                    startIcon={<EditOutlinedIcon />}
                     color='primary'
                     onClick={() => {
                       openInPopup(row)
                     }}
-                  >
-                    <EditOutlinedIcon fontSize='small' />
-                  </MyActionButton>
+                  ></MyActionButton>
                   <MyActionButton
+                    startIcon={<CloseIcon fontSize='small' />}
                     color='secondary'
                     onClick={() => {
                       setConfirmDialog({
@@ -504,9 +511,7 @@ export default function Group1List() {
                         }
                       })
                     }}
-                  >
-                    <CloseIcon fontSize='small' />
-                  </MyActionButton>
+                  ></MyActionButton>
                 </TableCell>
               </TableRow>
             ))}

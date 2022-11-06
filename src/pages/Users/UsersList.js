@@ -49,11 +49,16 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   searchInput: {
-    width: '40%'
+    minWidth: '300px',
+    width: '30%'
   },
   searchInputTypeBox: {
+    minWidth: '150px',
     width: '10%',
     margin: `0 0 0 ${theme.spacing(2)}`
+  },
+  myButton: {
+    margin: `0 0 0 ${theme.spacing(4)}`
   },
   newButton: {
     position: 'absolute',
@@ -433,6 +438,7 @@ export default function UsersList() {
             }}
             onChange={e => setSearchValue(e.target.value)}
           />
+
           <Box className={classes.searchInputTypeBox}>
             <MySelect
               fullWidth={true}
@@ -443,17 +449,20 @@ export default function UsersList() {
               options={searchTypeOptions}
             />
           </Box>
+
           <MyButton
             text='Filter'
             variant='outlined'
             startIcon={<FilterListIcon />}
             onClick={handleSearch}
+            className={classes.myButton}
           />
           <MyButton
             text='Refresh'
             variant='outlined'
             startIcon={<RefreshIcon />}
             onClick={getRowAllData}
+            className={classes.myButton}
           />
         </Toolbar>
         <TblContainer>
@@ -469,14 +478,14 @@ export default function UsersList() {
                 <TableCell>{row.u_dftowner}</TableCell>
                 <TableCell>
                   <MyActionButton
+                    startIcon={<EditOutlinedIcon fontSize='small' />}
                     color='primary'
                     onClick={() => {
                       openInPopup(row)
                     }}
-                  >
-                    <EditOutlinedIcon fontSize='small' />
-                  </MyActionButton>
+                  ></MyActionButton>
                   <MyActionButton
+                    startIcon={<CloseIcon fontSize='small' />}
                     color='secondary'
                     onClick={() => {
                       setConfirmDialog({
@@ -488,9 +497,7 @@ export default function UsersList() {
                         }
                       })
                     }}
-                  >
-                    <CloseIcon fontSize='small' />
-                  </MyActionButton>
+                  ></MyActionButton>
                 </TableCell>
               </TableRow>
             ))}

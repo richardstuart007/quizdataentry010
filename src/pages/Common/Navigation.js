@@ -52,12 +52,11 @@ export default function Navigation({ handlePage }) {
             startIcon={<PersonIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Owners'
             onClick={() => {
               handlePage('OwnerList')
             }}
-          >
-            Owners
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
 
         {/* .......................................................................................... */}
@@ -66,12 +65,11 @@ export default function Navigation({ handlePage }) {
             startIcon={<QuizIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Questions'
             onClick={() => {
               handlePage('QuestionList')
             }}
-          >
-            Questions
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'Group1List' ? (
@@ -79,12 +77,11 @@ export default function Navigation({ handlePage }) {
             startIcon={<GroupIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Group1'
             onClick={() => {
               handlePage('Group1List')
             }}
-          >
-            Group1
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'Group2List' ? (
@@ -92,12 +89,11 @@ export default function Navigation({ handlePage }) {
             startIcon={<GroupIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Group2'
             onClick={() => {
               handlePage('Group2List')
             }}
-          >
-            Group2
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'Group3List' ? (
@@ -105,12 +101,11 @@ export default function Navigation({ handlePage }) {
             startIcon={<GroupIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Group3'
             onClick={() => {
               handlePage('Group3List')
             }}
-          >
-            Group3
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'ReflinksList' ? (
@@ -118,38 +113,35 @@ export default function Navigation({ handlePage }) {
             startIcon={<QuizIcon fontSize='medium' />}
             variant='contained'
             color='warning'
+            text='Reflinks'
             onClick={() => {
               handlePage('ReflinksList')
             }}
-          >
-            Reflinks
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'WhoList' ? (
           <MyActionButton
             startIcon={<PersonIcon fontSize='medium' />}
             variant='contained'
+            text='Who'
             color='warning'
             onClick={() => {
               handlePage('WhoList')
             }}
-          >
-            Who
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
         {CurrentPage !== 'UsersList' ? (
           <MyActionButton
             startIcon={<PersonIcon fontSize='medium' />}
             variant='contained'
+            text='Users'
             color='warning'
             onClick={() => {
               handlePage('UsersList')
             }}
-          >
-            Users
-          </MyActionButton>
+          ></MyActionButton>
         ) : null}
         {/* .......................................................................................... */}
       </Grid>
